@@ -9,7 +9,10 @@
             "email": "or.vusal@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "psr/http-server-handler": "^1.0",
+        "psr/http-server-middleware": "^1.0"
+    },
     "autoload": {
         "psr-4": {
             "Framework\\": "src"
