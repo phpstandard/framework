@@ -10,7 +10,7 @@ use Psr\Http\Server\MiddlewareInterface;
 
 class Resolver
 {
-    /** @var ContainerInterface */
+    /** @var ContainerInterface $container */
     private $container;
 
     public function __construct(ContainerInterface $container)
