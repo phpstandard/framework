@@ -6,7 +6,7 @@ namespace Framework\EventDispatcher;
 
 use Psr\EventDispatcher\StoppableEventInterface;
 
-class AbstractStoppableEvent implements StoppableEventInterface
+abstract class AbstractStoppableEvent implements StoppableEventInterface
 {
     /**
      * Propagation identicator of the event. 
