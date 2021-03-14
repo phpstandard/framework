@@ -13,23 +13,32 @@ namespace Framework\Routing;
 
 use Framework\Contracts\Routing\DispatcherInterface;
 use Framework\Contracts\Routing\RouteInterface;
+use Framework\Contracts\Support\CallbackResolverInterface;
+use Framework\Support\CallbackResolver;
+use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
 class Dispatcher implements DispatcherInterface
 {
     /** @var RouteCollector $collector */
     private $collector;
 
-    /** @var Resolver $resolver */
+    /** @var CallbackResolverInterface $resolver */
     private $resolver;
+
+    /** @var ContainerInterface $container */
+    private $container;
 
     public function __construct(
         RouteCollector $collector,
-        ContainerInterface $container
+        ContainerInterface $container,
+        ?CallbackResolverInterface $resolver = null
     ) {
         $this->collector = $collector;
-        $this->resolver = new Resolver($container);
+        $this->container = $container;
+        $this->resolver = $resolver ?: new CallbackResolver($this->container);
     }
 
     /**
@@ -44,7 +53,8 @@ class Dispatcher implements DispatcherInterface
         );
 
         if ($route) {
-            $route = $this->resolver->resolve($route);
+            $this->resolveMiddlewares($route)
+                ->resolveHandler($route);
         }
 
         return $route;
@@ -154,5 +164,60 @@ class Dispatcher implements DispatcherInterface
         }
 
         return "`^$path$`u";
+    }
+
+    /**
+     * Resolve the middlewares
+     *
+     * @return self
+     */
+    private function resolveMiddlewares(Route $route): self
+    {
+        $resolved = [];
+
+        foreach ($route->getMiddlewareStack() as $middleware) {
+            $resolved[] = $this->resolveMiddleware($middleware);
+        }
+
+        $route->clearMiddlewareStack();
+        $route->middleware($resolved);
+
+        return $this;
+    }
+
+    /**
+     * Resolve a middleware implementation, optionally from a container
+     *
+     * @param MiddlewareInterface|string $middleware
+     *
+     * @return MiddlewareInterface
+     */
+    private function resolveMiddleware($middleware): MiddlewareInterface
+    {
+        if (is_string($middleware)) {
+            $middleware = $this->container->get($middleware);
+        }
+
+        if ($middleware instanceof MiddlewareInterface) {
+            return $middleware;
+        }
+
+        throw new InvalidArgumentException(
+            sprintf('Could not resolve middleware class: %s', $middleware)
+        );
+    }
+
+    /**
+     * Resolve handle
+     *
+     * @return self
+     */
+    private function resolveHandler(Route $route): self
+    {
+        $handler = $route->getHandler();
+        $handler = $this->resolver->resolve($handler);
+        $route->setHandler($handler);
+
+        return $this;
     }
 }

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Framework\EventDispatcher;
 
-use InvalidArgumentException;
+use Framework\Contracts\Support\CallbackResolverInterface;
+use Framework\Support\CallbackResolver;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 
@@ -21,6 +22,9 @@ class ListenerProvider implements ListenerProviderInterface
     /** @var ContainerInterface $container */
     private $container;
 
+    /** @var CallbackResolverInterface $resolver */
+    private $resolver;
+
     /**
      * An associative array of the listener wrappers
      * Key is the type of the event, value is the array of the ListenerWrapper.
@@ -29,9 +33,12 @@ class ListenerProvider implements ListenerProviderInterface
      */
     private $wrappers = [];
 
-    public function __construct(ContainerInterface $container)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        ?CallbackResolverInterface $resolver = null
+    ) {
         $this->container = $container;
+        $this->resolver = $resolver ?: new CallbackResolver($this->container);
     }
 
     /**
@@ -92,7 +99,7 @@ class ListenerProvider implements ListenerProviderInterface
             $listener = $wrapper->getListener();
 
             if (!$wrapper->getIsResolved()) {
-                $listener = $this->resolveHandle($listener);
+                $listener = $this->resolver->resolve($listener);
                 $wrapper->setListener($listener)
                     ->setIsResolved(true);
             }
@@ -137,49 +144,5 @@ class ListenerProvider implements ListenerProviderInterface
                 return $b->getPriority() <=> $a->getPriority();
             }
         );
-    }
-
-    /**
-     * Resolve listener handle
-     *
-     * @return callable
-     */
-    private function resolveHandle($handle): callable
-    {
-        if (is_string($handle) && strpos($handle, '::') !== false) {
-            $handle = explode('::', $handle);
-        } elseif (is_string($handle) && strpos($handle, '@') !== false) {
-            $handle = explode('@', $handle);
-        }
-
-        if (is_array($handle) && isset($handle[0]) && is_object($handle[0])) {
-            $handle = [$handle[0], $handle[1]];
-        }
-
-        if (is_array($handle) && isset($handle[0]) && is_string($handle[0])) {
-            $handle = [$this->resolveClass($handle[0]), $handle[1]];
-        }
-
-        if (is_string($handle) && method_exists($handle, '__invoke')) {
-            $handle = $this->resolveClass($handle);
-        }
-
-        if (!is_callable($handle)) {
-            throw new InvalidArgumentException('Could not resolve a callable for this listener');
-        }
-
-        return $handle;
-    }
-
-    /**
-     * Get an object instance from a class name
-     *
-     * @param string                  $class
-     *
-     * @return object
-     */
-    private function resolveClass(string $class)
-    {
-        return $this->container->get($class);
     }
 }
