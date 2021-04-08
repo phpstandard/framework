@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Framework\Routing;
 
 use Framework\Contracts\Routing\RouteInterface;
@@ -111,8 +109,8 @@ class Route implements RouteInterface
      */
     public function setPath(string $path): self
     {
-        if (substr($path, -2) !== '/?') {
-            $path = rtrim($path, '/') . '/?';
+        if (substr($path, -4) !== '[/]?') {
+            $path = rtrim($path, '/') . '[/]?';
         }
 
         $this->path = $path;
@@ -199,17 +197,6 @@ class Route implements RouteInterface
     ): ResponseInterface {
         $handler = $this->getHandler();
         $response = $handler($request, ...array_values($this->getParams()));
-
-        // if (!($response instanceof ResponseInterface)) {
-        //     // Clear json_last_error()
-        //     json_encode(null);
-        //     $body = json_encode($response);
-
-        //     if (JSON_ERROR_NONE === json_last_error()) {
-        //         $response = new Response();
-        //         $response->getBody()->write($body);
-        //     }
-        // }
 
         return $response;
     }

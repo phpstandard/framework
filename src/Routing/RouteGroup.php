@@ -48,7 +48,7 @@ class RouteGroup extends RouteCollector
     }
 
     /**
-     * Get route map
+     * Generate route map
      *
      * @return Route[]
      */

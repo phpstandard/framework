@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Dispatcher::match() and Dispatcher::compilePath() methods are heavily inspired 
- * by AltoRouter
+ * Dispatcher::match() and Dispatcher::compilePath() methods are heavily 
+ * inspired by AltoRouter
  * 
  * @see https://altorouter.com
  */

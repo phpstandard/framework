@@ -10,12 +10,8 @@ class RouteCollector
 {
     use MiddlewareAwareTrait;
 
-    /**
-     * Array of the routes and groups
-     *
-     * @var array
-     */
-    private $collection = [];
+    /** @var (Route|RouteGroup)[] $collection */
+    protected $collection = [];
 
     /** @var Route[] $route */
     private $routes;
@@ -121,6 +117,11 @@ class RouteCollector
         return $this->routes;
     }
 
+    /**
+     * Generate route map
+     *
+     * @return Route[]
+     */
     protected function generateRouteMap(): array
     {
         $map = [];
