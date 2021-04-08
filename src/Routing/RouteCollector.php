@@ -137,42 +137,4 @@ class RouteCollector
 
         return $map;
     }
-
-    /**
-     * Resolve the middlewares
-     *
-     * @return self
-     */
-    // public function resolveMiddlewares(): self
-    // {
-    //     $resolved = [];
-
-    //     foreach ($this->getMiddlewareStack() as $middleware) {
-    //         $resolved[] = $this->resolveMiddleware($middleware);
-    //     }
-
-    //     $this->middleware = $resolved;
-    //     return $this;
-    // }
-
-    /**
-     * Resolve a middleware implementation, optionally from a container
-     *
-     * @param MiddlewareInterface|string $middleware
-     * @param ContainerInterface|null    $container
-     *
-     * @return MiddlewareInterface
-     */
-    // protected function resolveMiddleware($middleware): MiddlewareInterface
-    // {
-    //     if (is_string($middleware) && class_exists($middleware)) {
-    //         $middleware = new $middleware;
-    //     }
-
-    //     if ($middleware instanceof MiddlewareInterface) {
-    //         return $middleware;
-    //     }
-
-    //     throw new InvalidArgumentException(sprintf('Could not resolve middleware class: %s', $middleware));
-    // }
 }
