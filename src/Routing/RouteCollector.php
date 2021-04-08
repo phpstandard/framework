@@ -28,7 +28,7 @@ class RouteCollector
      */
     public function addRoute(Route $route): self
     {
-        $this->data[] = $route;
+        $this->collection[] = $route;
 
         return $this;
     }
@@ -41,7 +41,7 @@ class RouteCollector
      */
     public function addGroup(RouteGroup $group): self
     {
-        $this->data[] = $group;
+        $this->collection[] = $group;
 
         return $this;
     }
@@ -114,11 +114,11 @@ class RouteCollector
      */
     public function getRoutes(): array
     {
-        if (is_null($this->routeMap)) {
-            $this->routeMap = $this->generateRouteMap();
+        if (is_null($this->routes)) {
+            $this->routes = $this->generateRouteMap();
         }
 
-        return $this->routeMap;
+        return $this->routes;
     }
 
     protected function generateRouteMap(): array
