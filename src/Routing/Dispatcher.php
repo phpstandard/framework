@@ -31,6 +31,17 @@ class Dispatcher implements DispatcherInterface
     /** @var ContainerInterface $container */
     private $container;
 
+    /** @var string[] Array of the match types  */
+    protected $matchTypes = [
+        'i'  => '[0-9]++', // Integer
+        'a'  => '[0-9A-Za-z]++', // Alphanumeric
+        'h'  => '[0-9A-Fa-f]++', // Hexadecimal
+        's'  => '[0-9A-Za-z\-]++', // url slug
+        '*'  => '.+?', // 
+        '**' => '.++',
+        ''   => '[^/\.]++'
+    ];
+
     public function __construct(
         RouteCollector $collector,
         ContainerInterface $container,
@@ -135,13 +146,13 @@ class Dispatcher implements DispatcherInterface
     protected function compilePath($path)
     {
         if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $path, $matches, PREG_SET_ORDER)) {
-            $matchTypes = $this->matchTypes;
             foreach ($matches as $match) {
                 list($block, $pre, $type, $param, $optional) = $match;
 
-                if (isset($matchTypes[$type])) {
-                    $type = $matchTypes[$type];
+                if (isset($this->matchTypes[$type])) {
+                    $type = $this->matchTypes[$type];
                 }
+
                 if ($pre === '.') {
                     $pre = '\.';
                 }
