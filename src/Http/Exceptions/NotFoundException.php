@@ -23,7 +23,7 @@ class NotFoundException extends RuntimeException
     ) {
         $this->request = $request;
 
-        parent::__construct($message, StatusCodes::HTTP_NOT_FOUND, $previous)
+        parent::__construct($message, StatusCodes::HTTP_NOT_FOUND, $previous);
     }
 
     /**
