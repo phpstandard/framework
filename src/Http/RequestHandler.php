@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Framework\Http;
 
 use Framework\Contracts\Routing\DispatcherInterface;
+use Framework\Contracts\Routing\RouteInterface;
 use Framework\Http\Exceptions\NotFoundException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -18,6 +19,9 @@ class RequestHandler implements RequestHandlerInterface
 
     /** @var MiddlewareInterface[] $middlewareStack */
     private $middlewareStack = [];
+
+    /** @var RouteInterface $route */
+    private $route;
 
     public function __construct(DispatcherInterface $dispatcher)
     {
