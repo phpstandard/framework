@@ -109,7 +109,7 @@ class Route implements RouteInterface
      */
     public function setPath(string $path): self
     {
-        if (substr($path, -4) !== '[/]?') {
+        if ($path != '*' && substr($path, -4) !== '[/]?') {
             $path = rtrim($path, '/') . '[/]?';
         }
 
