@@ -16,21 +16,21 @@ use Throwable;
 class Container implements ContainerInterface
 {
     /**
-     * Registered services
+     * Registered definitions
      *
      * @var array
      */
-    private $services = [];
+    private $definitions = [];
 
     /**
-     * Identifier for the registered singleton services
+     * Identifier for the registered shared (singleton) services
      *
      * @var array
      */
-    private $singletons = [];
+    private $shared = [];
 
     /**
-     * Resolved singletons
+     * Resolved shared (singleton) services
      *
      * @var array
      */
@@ -42,9 +42,9 @@ class Container implements ContainerInterface
     public function set(
         string $abstract,
         $concrete = null,
-        bool $is_singleton = false
+        bool $shared = false
     ): ContainerInterface {
-        if (isset($this->services[$abstract])) {
+        if (isset($this->definitions[$abstract])) {
             throw new ContainerException("An entry with an id of {$abstract} is already registered");
         }
 
@@ -52,10 +52,10 @@ class Container implements ContainerInterface
             $concrete = $abstract;
         }
 
-        $this->services[$abstract] = $concrete;
+        $this->definitions[$abstract] = $concrete;
 
-        if ($is_singleton && !isset($this->singletons[$abstract])) {
-            $this->singletons[$abstract] = true;
+        if ($shared && !isset($this->shared[$abstract])) {
+            $this->shared[$abstract] = true;
         }
 
         return $this;
@@ -82,7 +82,7 @@ class Container implements ContainerInterface
      */
     public function has($id)
     {
-        if (isset($this->services[$id])) {
+        if (isset($this->definitions[$id])) {
             return true;
         }
 
@@ -104,8 +104,8 @@ class Container implements ContainerInterface
      */
     function unset($id): self
     {
-        unset($this->services[$id]);
-        unset($this->singletons[$id]);
+        unset($this->definitions[$id]);
+        unset($this->shared[$id]);
         return $this;
     }
 
@@ -117,14 +117,14 @@ class Container implements ContainerInterface
      */
     private function resolve(string $id)
     {
-        $is_singleton = isset($this->singletons[$id]);
-        if ($is_singleton && isset($this->resolved[$id])) {
+        $is_shared = isset($this->shared[$id]);
+        if ($is_shared && isset($this->resolved[$id])) {
             return $this->resolved[$id];
         }
 
         $entry = $id;
-        if (isset($this->services[$id])) {
-            $entry = $this->services[$id];
+        if (isset($this->definitions[$id])) {
+            $entry = $this->definitions[$id];
 
             if (is_object($entry)) {
                 return $entry;
@@ -142,8 +142,8 @@ class Container implements ContainerInterface
         try {
             $reflector = $this->getReflector($entry);
         } catch (Throwable $th) {
-            if (isset($this->services[$id])) {
-                return $this->services[$id];
+            if (isset($this->definitions[$id])) {
+                return $this->definitions[$id];
             }
 
             throw new ContainerException("{$id} is not resolvable", 0, $th);
@@ -151,7 +151,7 @@ class Container implements ContainerInterface
 
         $instance = $this->getInstance($reflector);
 
-        if ($is_singleton) {
+        if ($is_shared) {
             $this->resolved[$id] = $instance;
         }
 

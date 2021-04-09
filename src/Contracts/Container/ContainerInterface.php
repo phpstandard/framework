@@ -11,12 +11,12 @@ interface ContainerInterface extends PsrContainerInterface
      *
      * @param string $abstract
      * @param mixed $concrete
-     * @param boolean $is_singleton
+     * @param boolean $shared
      * @return self
      */
     public function set(
         string $abstract,
         $concrete = null,
-        bool $is_singleton = false
+        bool $shared = false
     ): ContainerInterface;
 }
