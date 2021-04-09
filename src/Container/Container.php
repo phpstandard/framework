@@ -174,7 +174,7 @@ class Container implements ContainerInterface
     private function getInstance(ReflectionClass $item)
     {
         if (!$item->isInstantiable()) {
-            throw new ContainerException("{$item->nane} is not instantiable");
+            throw new ContainerException("{$item->name} is not instantiable");
         }
 
         $constructor = $item->getConstructor();
