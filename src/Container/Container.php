@@ -44,10 +44,6 @@ class Container implements ContainerInterface
         $concrete = null,
         bool $shared = false
     ): ContainerInterface {
-        if (isset($this->definitions[$abstract])) {
-            throw new ContainerException("An entry with an id of {$abstract} is already registered");
-        }
-
         if (is_null($concrete)) {
             $concrete = $abstract;
         }
