@@ -7,7 +7,7 @@ namespace Framework\Container;
 use Closure;
 use Framework\Container\Exceptions\ContainerException;
 use Framework\Container\Exceptions\NotFoundException;
-use Psr\Container\ContainerInterface;
+use Framework\Contracts\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -37,18 +37,13 @@ class Container implements ContainerInterface
     private $resolved = [];
 
     /**
-     * Set an entry
-     *
-     * @param string $abstract
-     * @param Closure|callable|object|string|null $concrete
-     * @param boolean $is_singleton
-     * @return self
+     * @inheritDoc
      */
     public function set(
         string $abstract,
         $concrete = null,
         bool $is_singleton = false
-    ): self {
+    ): ContainerInterface {
         if (isset($this->services[$abstract])) {
             throw new ContainerException("An entry with an id of {$abstract} is already registered");
         }
