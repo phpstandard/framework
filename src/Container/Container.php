@@ -142,6 +142,10 @@ class Container implements ContainerInterface
         try {
             $reflector = $this->getReflector($entry);
         } catch (Throwable $th) {
+            if (isset($this->services[$id])) {
+                return $this->services[$id];
+            }
+
             throw new ContainerException("{$id} is not resolvable", 0, $th);
         }
 

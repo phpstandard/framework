@@ -10,7 +10,7 @@ interface ContainerInterface extends PsrContainerInterface
      * Set an entry
      *
      * @param string $abstract
-     * @param Closure|callable|object|string|null $concrete
+     * @param mixed $concrete
      * @param boolean $is_singleton
      * @return self
      */
