@@ -9,6 +9,7 @@ use Framework\Container\Exceptions\ContainerException;
 use Framework\Container\Exceptions\NotFoundException;
 use Framework\Contracts\Container\ContainerInterface;
 use ReflectionClass;
+use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 use Throwable;
@@ -55,6 +56,38 @@ class Container implements ContainerInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function callMehtod($instance, string $method_name)
+    {
+        if (!is_object($instance) && !is_string($instance)) {
+            throw new ContainerException(sprintf(
+                'Argument 1 passed to %s must be type of either string or object. %s passed.',
+                __METHOD__,
+                gettype($instance)
+            ));
+        }
+
+        if (is_string($instance)) {
+            $instance = $this->get($instance);
+        }
+
+        $reflector = new ReflectionClass($instance);
+
+        try {
+            $method = $reflector->getMethod($method_name);
+        } catch (Throwable $th) {
+            throw new ContainerException(sprintf(
+                "%s does not exists on",
+                get_class($instance) . '::' . $method_name . '()'
+            ), 0, $th);
+        }
+
+        $params = $this->getResolvedParameters($method);
+        return $method->invokeArgs($instance, $params);
     }
 
     /**
@@ -186,14 +219,24 @@ class Container implements ContainerInterface
             return $item->newInstance();
         }
 
+        $params = $this->getResolvedParameters($constructor);
+        return $item->newInstanceArgs($params);
+    }
+
+    /**
+     * Get array of the resolved params
+     *
+     * @param ReflectionMethod $method
+     * @return array
+     */
+    private function getResolvedParameters(ReflectionMethod $method): array
+    {
         $params = [];
-        foreach ($constructor->getParameters() as $param) {
-            if ($param->getType()) {
-                $params[] = $this->resolveParameter($param);
-            }
+        foreach ($method->getParameters() as $param) {
+            $params[] = $this->resolveParameter($param);
         }
 
-        return $item->newInstanceArgs($params);
+        return $params;
     }
 
     /**
