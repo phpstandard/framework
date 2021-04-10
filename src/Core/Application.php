@@ -4,8 +4,8 @@ namespace Framework\Core;
 
 use Exception;
 use Framework\Contracts\Container\BootableServiceProviderInterface;
+use Framework\Contracts\Container\ContainerInterface;
 use Framework\Contracts\Container\ServiceProviderInterface;
-use Psr\Container\ContainerInterface;
 
 class Application
 {
@@ -71,7 +71,7 @@ class Application
 
         foreach ($providers as $provider) {
             if ($provider instanceof BootableServiceProviderInterface) {
-                $provider->boot();
+                $this->container->callMehtod($provider, 'boot');
             }
         }
     }
