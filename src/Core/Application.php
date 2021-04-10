@@ -3,9 +3,9 @@
 namespace Framework\Core;
 
 use Exception;
-use Framework\Contracts\Container\BootableServiceProviderInterface;
 use Framework\Contracts\Container\ContainerInterface;
 use Framework\Contracts\Container\ServiceProviderInterface;
+use Framework\Contracts\Core\BootstrapperInterface;
 
 class Application
 {
@@ -15,12 +15,17 @@ class Application
     /** @var (ServiceProviderInterface|string)[]|null */
     private $providers;
 
+    /** @var (BootstrapperInterface|string)[]|null */
+    private $bootstrappers;
+
     public function __construct(
         ContainerInterface $container,
-        ?array $providers = null
+        ?array $providers = null,
+        ?array $bootstrappers = null
     ) {
         $this->container = $container;
         $this->providers = $providers;
+        $this->bootstrappers = $bootstrappers;
     }
 
     /**
@@ -39,18 +44,41 @@ class Application
     }
 
     /**
+     * Add bootstrapper
+     *
+     * @param BootstrapperInterface|string $bootstrapper
+     * @return void
+     */
+    public function addBootstrapper($bootstrapper)
+    {
+        if (is_null($this->bootstrappers)) {
+            $this->bootstrappers = [];
+        }
+
+        $this->bootstrappers[] = $bootstrapper;
+    }
+
+    /**
      * Boot application
      *
      * @return void
      */
     public function boot()
     {
+        $this->invokeServiceProviders();
+        $this->invokeBootstrappers();
+    }
+
+    /**
+     * Invoke service providers
+     *
+     * @return void
+     */
+    private function invokeServiceProviders()
+    {
         if (!$this->providers) {
             return;
         }
-
-        /** @var ServiceProviderInterface[] $providers */
-        $providers = [];
 
         foreach ($this->providers as $provider) {
             if (is_string($provider)) {
@@ -66,13 +94,34 @@ class Application
             }
 
             $provider->register($this->container);
-            $providers[] = $provider;
+        }
+    }
+
+    /**
+     * Invoke bootstrappers
+     *
+     * @return void
+     */
+    private function invokeBootstrappers()
+    {
+        if (!$this->bootstrappers) {
+            return;
         }
 
-        foreach ($providers as $provider) {
-            if ($provider instanceof BootableServiceProviderInterface) {
-                $this->container->callMehtod($provider, 'boot');
+        foreach ($this->bootstrappers as $bootstrapper) {
+            if (is_string($bootstrapper)) {
+                $bootstrapper = $this->container->get($bootstrapper);
             }
+
+            if (!($bootstrapper instanceof BootstrapperInterface)) {
+                throw new Exception(sprintf(
+                    "%s must implement %s",
+                    get_class($bootstrapper),
+                    BootstrapperInterface::class
+                ));
+            }
+
+            $bootstrapper->bootstrap();
         }
     }
 }
