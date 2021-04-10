@@ -126,19 +126,6 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Remove an entry from the container
-     *
-     * @param string $id
-     * @return self
-     */
-    function unset($id): self
-    {
-        unset($this->definitions[$id]);
-        unset($this->shared[$id]);
-        return $this;
-    }
-
-    /**
      * Resolve entry
      *
      * @param string $id
