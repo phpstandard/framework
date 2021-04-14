@@ -45,11 +45,11 @@ class Dispatcher implements DispatcherInterface
     public function __construct(
         RouteCollector $collector,
         ContainerInterface $container,
-        ?CallbackResolverInterface $resolver = null
+        CallbackResolverInterface $resolver
     ) {
         $this->collector = $collector;
         $this->container = $container;
-        $this->resolver = $resolver ?: new CallbackResolver($this->container);
+        $this->resolver = $resolver;
     }
 
     /**
