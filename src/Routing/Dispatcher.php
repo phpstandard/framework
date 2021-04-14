@@ -14,11 +14,8 @@ namespace Framework\Routing;
 use Framework\Contracts\Routing\DispatcherInterface;
 use Framework\Contracts\Routing\RouteInterface;
 use Framework\Contracts\Support\CallbackResolverInterface;
-use Framework\Support\CallbackResolver;
-use InvalidArgumentException;
-use Psr\Container\ContainerInterface;
+use Framework\Contracts\Support\MiddlewareResolverInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
 
 class Dispatcher implements DispatcherInterface
 {
@@ -26,10 +23,10 @@ class Dispatcher implements DispatcherInterface
     private $collector;
 
     /** @var CallbackResolverInterface $resolver */
-    private $resolver;
+    private $callbackResolver;
 
-    /** @var ContainerInterface $container */
-    private $container;
+    /** @var MiddlewareResolverInterface $middlewareResolver */
+    private $middlewareResolver;
 
     /** @var string[] Array of the match types  */
     protected $matchTypes = [
@@ -44,12 +41,12 @@ class Dispatcher implements DispatcherInterface
 
     public function __construct(
         RouteCollector $collector,
-        ContainerInterface $container,
-        CallbackResolverInterface $resolver
+        MiddlewareResolverInterface $middleware_resolver,
+        CallbackResolverInterface $callback_resolver
     ) {
         $this->collector = $collector;
-        $this->container = $container;
-        $this->resolver = $resolver;
+        $this->middlewareResolver = $middleware_resolver;
+        $this->callbackResolver = $callback_resolver;
     }
 
     /**
@@ -187,35 +184,13 @@ class Dispatcher implements DispatcherInterface
         $resolved = [];
 
         foreach ($route->getMiddlewareStack() as $middleware) {
-            $resolved[] = $this->resolveMiddleware($middleware);
+            $resolved[] = $this->middlewareResolver->resolve($middleware);
         }
 
         $route->clearMiddlewareStack();
         $route->middleware($resolved);
 
         return $this;
-    }
-
-    /**
-     * Resolve a middleware implementation, optionally from a container
-     *
-     * @param MiddlewareInterface|string $middleware
-     *
-     * @return MiddlewareInterface
-     */
-    private function resolveMiddleware($middleware): MiddlewareInterface
-    {
-        if (is_string($middleware)) {
-            $middleware = $this->container->get($middleware);
-        }
-
-        if ($middleware instanceof MiddlewareInterface) {
-            return $middleware;
-        }
-
-        throw new InvalidArgumentException(
-            sprintf('Could not resolve middleware class: %s', $middleware)
-        );
     }
 
     /**
@@ -226,7 +201,7 @@ class Dispatcher implements DispatcherInterface
     private function resolveHandler(Route $route): self
     {
         $handler = $route->getHandler();
-        $handler = $this->resolver->resolve($handler);
+        $handler = $this->callbackResolver->resolve($handler);
         $route->setHandler($handler);
 
         return $this;
