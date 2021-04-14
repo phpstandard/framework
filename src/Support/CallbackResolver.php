@@ -36,7 +36,6 @@ class CallbackResolver implements CallbackResolverInterface
         if (
             is_array($callback)
             && count($callback) == 2
-            && isset($callback[0])
             && is_object($callback[0])
         ) {
             $callback = [$callback[0], $callback[1]];
@@ -45,7 +44,6 @@ class CallbackResolver implements CallbackResolverInterface
         if (
             is_array($callback)
             && count($callback) == 2
-            && isset($callback[0])
             && is_string($callback[0])
         ) {
             $callback = [$this->resolveClass($callback[0]), $callback[1]];
