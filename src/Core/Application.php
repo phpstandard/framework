@@ -5,9 +5,10 @@ namespace Framework\Core;
 use Exception;
 use Framework\Contracts\Container\ContainerInterface;
 use Framework\Contracts\Container\ServiceProviderInterface;
+use Framework\Contracts\Core\ApplicationInterface;
 use Framework\Contracts\Core\BootstrapperInterface;
 
-class Application
+class Application implements ApplicationInterface
 {
     /** @var ContainerInterface $container */
     private $container;
@@ -34,62 +35,7 @@ class Application
     }
 
     /**
-     * Add service provider
-     *
-     * @param ServiceProviderInterface|string $provider
-     * @return void
-     */
-    public function addServiceProvider($provider)
-    {
-        if (is_null($this->providers)) {
-            $this->providers = [];
-        }
-
-        $this->providers[] = $provider;
-    }
-
-    /**
-     * Add bootstrapper
-     *
-     * @param BootstrapperInterface|string $bootstrapper
-     * @return void
-     */
-    public function addBootstrapper($bootstrapper)
-    {
-        if (is_null($this->bootstrappers)) {
-            $this->bootstrappers = [];
-        }
-
-        $this->bootstrappers[] = $bootstrapper;
-    }
-
-    /**
-     * Get the value of basePath
-     *
-     * @return string
-     */
-    public function getBasePath(): string
-    {
-        return $this->basePath;
-    }
-
-    /**
-     * Set the value of basePath
-     *
-     * @param string $basePath
-     * @return self
-     */
-    public function setBasePath(string $basePath): self
-    {
-        $this->basePath = $basePath;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of container
-     * 
-     * @return ContainerInterface
+     * @inheritDoc
      */
     public function getContainer(): ContainerInterface
     {
@@ -97,22 +43,60 @@ class Application
     }
 
     /**
-     * Set the value of container
-     *
-     * @param ContainerInterface $container
-     * @return  self
+     * @inheritDoc
      */
-    public function setContainer(ContainerInterface $container): self
-    {
+    public function setContainer(
+        ContainerInterface $container
+    ): ApplicationInterface {
         $this->container = $container;
-
         return $this;
     }
 
     /**
-     * Boot application
-     *
-     * @return void
+     * @inheritDoc
+     */
+    public function addServiceProvider($provider): ApplicationInterface
+    {
+        if (is_null($this->providers)) {
+            $this->providers = [];
+        }
+
+        $this->providers[] = $provider;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addBootstrapper($bootstrapper): ApplicationInterface
+    {
+        if (is_null($this->bootstrappers)) {
+            $this->bootstrappers = [];
+        }
+
+        $this->bootstrappers[] = $bootstrapper;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getBasePath(): string
+    {
+        return $this->basePath;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setBasePath(string $basePath): ApplicationInterface
+    {
+        $this->basePath = $basePath;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
      */
     public function boot()
     {
