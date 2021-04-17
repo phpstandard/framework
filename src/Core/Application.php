@@ -10,7 +10,7 @@ use Framework\Contracts\Core\BootstrapperInterface;
 class Application
 {
     /** @var ContainerInterface $container */
-    public $container;
+    private $container;
 
     /** @var (ServiceProviderInterface|string)[]|null */
     private $providers;
@@ -82,6 +82,29 @@ class Application
     public function setBasePath(string $basePath): self
     {
         $this->basePath = $basePath;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of container
+     * 
+     * @return ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
+    }
+
+    /**
+     * Set the value of container
+     *
+     * @param ContainerInterface $container
+     * @return  self
+     */
+    public function setContainer(ContainerInterface $container): self
+    {
+        $this->container = $container;
 
         return $this;
     }
