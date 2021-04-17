@@ -18,14 +18,19 @@ class Application
     /** @var (BootstrapperInterface|string)[]|null */
     private $bootstrappers;
 
+    /** @var string $basePath Base (root) path of the app */
+    private $basePath;
+
     public function __construct(
         ContainerInterface $container,
         ?array $providers = null,
-        ?array $bootstrappers = null
+        ?array $bootstrappers = null,
+        ?string $base_path = null
     ) {
         $this->container = $container;
         $this->providers = $providers;
         $this->bootstrappers = $bootstrappers;
+        $this->basePath = $base_path;
     }
 
     /**
@@ -56,6 +61,29 @@ class Application
         }
 
         $this->bootstrappers[] = $bootstrapper;
+    }
+
+    /**
+     * Get the value of basePath
+     *
+     * @return string
+     */
+    public function getBasePath(): string
+    {
+        return $this->basePath;
+    }
+
+    /**
+     * Set the value of basePath
+     *
+     * @param string $basePath
+     * @return self
+     */
+    public function setBasePath(string $basePath): self
+    {
+        $this->basePath = $basePath;
+
+        return $this;
     }
 
     /**
