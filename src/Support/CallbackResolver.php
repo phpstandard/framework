@@ -23,10 +23,6 @@ class CallbackResolver implements CallbackResolverInterface
      */
     public function resolve($callback): callable
     {
-        if (is_callable($callback)) {
-            return $callback;
-        }
-
         if (is_string($callback) && strpos($callback, '::') !== false) {
             $callback = explode('::', $callback);
         } elseif (is_string($callback) && strpos($callback, '@') !== false) {
