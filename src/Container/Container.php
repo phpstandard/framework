@@ -238,9 +238,18 @@ class Container implements ContainerInterface
 
         if ($type !== null) {
             assert($type instanceof ReflectionNamedType);
-            return $this->get($type->getName());
-        } elseif ($parameter->isDefaultValueAvailable()) {
+
+            if (!$type->isBuiltin() && $this->has($type->getName())) {
+                return $this->get($type->getName());
+            }
+        }
+
+        if ($parameter->isDefaultValueAvailable()) {
             return $parameter->getDefaultValue();
+        }
+
+        if ($parameter->allowsNull()) {
+            return null;
         }
 
         throw new ContainerException("{$parameter->name} can't be instatiated and yet has no default value");
