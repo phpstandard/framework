@@ -44,12 +44,12 @@ class RouteCollector
 
     /**
      * Create a new route
-     *
-     * @param string $method
-     * @param string $path
-     * @param callable $handle
-     * @param string|null $name
-     * @return Route
+     * 
+     * @param string $method 
+     * @param string $path 
+     * @param mixed $handle 
+     * @param null|string $name 
+     * @return RouteCollector 
      */
     public function map(
         string $method,
