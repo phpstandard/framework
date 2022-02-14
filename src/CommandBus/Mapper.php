@@ -47,15 +47,16 @@ class Mapper
     /**
      * @param string $cmd 
      * @param mixed $handler 
-     * @return void 
+     * @return Mapper 
      * @throws InvalidArgumentException 
      */
-    public function map(string $cmd, $handler)
+    public function map(string $cmd, $handler): self
     {
         if (!is_string($handler) && !is_object($handler)) {
             throw new InvalidArgumentException;
         }
 
         $this->map[$cmd] = $handler;
+        return $this;
     }
 }
