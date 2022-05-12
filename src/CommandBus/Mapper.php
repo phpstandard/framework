@@ -36,8 +36,9 @@ class Mapper
                 if (!is_object($handler)) {
                     $handler = $this->container->get($handler);
                     $this->map[$command] = $handler;
-                    return $handler;
                 }
+
+                return $handler;
             }
         }
 
