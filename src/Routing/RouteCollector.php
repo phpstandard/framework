@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Framework\Routing;
 
+use Framework\Contracts\Routing\RouteInterface;
 use Framework\Routing\Traits\MiddlewareAwareTrait;
 
 class RouteCollector
@@ -84,17 +85,17 @@ class RouteCollector
     }
 
     /**
-     * Create a new route group
-     *
-     * @param string|null $prefix
-     * @param RouteGroup|null $parent_group
-     * @return RouteGroup
+     * @param null|string $prefix 
+     * @param null|RouteGroup $parent_group 
+     * @param null|string $name 
+     * @return RouteGroup 
      */
     public static function group(
         ?string $prefix = null,
-        ?RouteGroup $parent_group = null
+        ?RouteGroup $parent_group = null,
+        ?string $name = null
     ): RouteGroup {
-        $group = new RouteGroup($prefix ?: '');
+        $group = new RouteGroup($prefix ?: '', $name);
 
         if ($parent_group) {
             $parent_group->addGroup($group);
@@ -115,6 +116,28 @@ class RouteCollector
         }
 
         return $this->routes;
+    }
+
+    /**
+     * @param string $name 
+     * @return RouteInterface|RouteGroup|null 
+     */
+    public function getByName(string $name)
+    {
+        foreach ($this->collection as $item) {
+            if ($item->getName() == $name) {
+                return $item;
+            }
+
+            if ($item instanceof RouteGroup) {
+                $result = $item->getByName($name);
+                if ($result) {
+                    return $result;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
