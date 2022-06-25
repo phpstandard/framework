@@ -14,13 +14,23 @@ class RouteGroup extends RouteCollector
     private $prefix;
 
     /**
-     * Construct a route group
+     * Group name
      *
-     * @param string $prefix
+     * @var string|null
      */
-    public function __construct(string $prefix)
-    {
-        $this->setPrefix($prefix);
+    private $name;
+
+    /**
+     * @param string $prefix 
+     * @param null|string $name 
+     * @return void 
+     */
+    public function __construct(
+        string $prefix,
+        ?string $name = null
+    ) {
+        $this->setPrefix($prefix)
+            ->setName($name);
     }
 
     /**
@@ -44,6 +54,22 @@ class RouteGroup extends RouteCollector
     {
         $this->prefix = $prefix;
 
+        return $this;
+    }
+
+    /** @return null|string  */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param null|string $name 
+     * @return $this 
+     */
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
         return $this;
     }
 
