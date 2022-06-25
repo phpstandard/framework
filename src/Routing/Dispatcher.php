@@ -55,7 +55,7 @@ class Dispatcher implements DispatcherInterface
     public function dispatch(ServerRequestInterface $request): ?RouteInterface
     {
         $uri = $request->getUri();
-        $route = $this->match(
+        $route = $this->matchRoute(
             $uri->getPath(),
             $request->getMethod()
         );
@@ -69,13 +69,11 @@ class Dispatcher implements DispatcherInterface
     }
 
     /**
-     * Match a given Request Url against stored routes
-     * 
-     * @param string $request_url
-     * @param string $request_method
-     * @return array|boolean Array with route information on success, false on failure (no match).
+     * @param string $request_url 
+     * @param string $request_method 
+     * @return null|Route 
      */
-    private function match(string $request_url, string $request_method): ?Route
+    private function matchRoute(string $request_url, string $request_method): ?Route
     {
         $params = [];
         $routes = $this->collector->getRoutes();
