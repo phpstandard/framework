@@ -4,56 +4,35 @@ declare(strict_types=1);
 
 namespace Framework\Routing;
 
+/** @package Framework\Routing */
 class RouteGroup extends RouteCollector
 {
-    /**
-     * Group prefix
-     *
-     * @var string
-     */
-    private $prefix;
-
-    /**
-     * Group name
-     *
-     * @var string|null
-     */
-    private $name;
-
     /**
      * @param string $prefix 
      * @param null|string $name 
      * @return void 
      */
     public function __construct(
-        string $prefix,
-        ?string $name = null
+        private string $prefix,
+        private ?string $name = null
     ) {
         $this->setPrefix($prefix)
             ->setName($name);
     }
 
-    /**
-     * Get group prefix
-     *
-     * @return  string
-     */
+    /** @return string  */
     public function getPrefix(): string
     {
         return $this->prefix;
     }
 
     /**
-     * Set group prefix
-     *
-     * @param  string  $prefix  Group prefix
-     *
-     * @return  self
+     * @param string $prefix 
+     * @return RouteGroup 
      */
-    public function setPrefix(string $prefix): self
+    public function setPrefix(string $prefix): RouteGroup
     {
         $this->prefix = $prefix;
-
         return $this;
     }
 
@@ -65,9 +44,9 @@ class RouteGroup extends RouteCollector
 
     /**
      * @param null|string $name 
-     * @return $this 
+     * @return RouteGroup 
      */
-    public function setName(?string $name): self
+    public function setName(?string $name): RouteGroup
     {
         $this->name = $name;
         return $this;

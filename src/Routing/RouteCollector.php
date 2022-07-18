@@ -7,76 +7,30 @@ namespace Framework\Routing;
 use Framework\Contracts\Routing\RouteInterface;
 use Framework\Routing\Traits\MiddlewareAwareTrait;
 
+/** @package Framework\Routing */
 class RouteCollector
 {
     use MiddlewareAwareTrait;
 
     /** @var (Route|RouteGroup)[] $collection */
-    protected $collection = [];
+    protected array $collection = [];
 
     /** @var Route[] $route */
-    private $routes;
-
-    /**
-     * Add route
-     *
-     * @param Route $route
-     * @return self
-     */
-    public function addRoute(Route $route): self
-    {
-        $this->collection[] = $route;
-
-        return $this;
-    }
-
-    /**
-     * Add route group
-     *
-     * @param RouteGroup $group
-     * @return self
-     */
-    public function addGroup(RouteGroup $group): self
-    {
-        $this->collection[] = $group;
-
-        return $this;
-    }
+    private array $routes;
 
     /**
      * Create a new route
      * 
      * @param string $method 
      * @param string $path 
-     * @param mixed $handle 
+     * @param callable|string $handle 
      * @param null|string $name 
-     * @return RouteCollector 
-     */
-    public function map(
-        string $method,
-        string $path,
-        $handle,
-        ?string $name = null
-    ): self {
-        $route = new Route($method, $path, $handle, $name);
-        $this->addRoute($route);
-
-        return $this;
-    }
-
-    /**
-     * Create a new route
-     *
-     * @param string $method
-     * @param string $path
-     * @param callable $handle
-     * @param string|null $name
-     * @return Route
+     * @return Route 
      */
     public static function route(
         string $method,
         string $path,
-        $handle,
+        callable|string $handle,
         ?string $name = null
     ): Route {
         $route = new Route($method, $path, $handle, $name);
@@ -86,22 +40,67 @@ class RouteCollector
 
     /**
      * @param null|string $prefix 
-     * @param null|RouteGroup $parent_group 
+     * @param null|RouteGroup $parentGroup 
      * @param null|string $name 
      * @return RouteGroup 
      */
     public static function group(
         ?string $prefix = null,
-        ?RouteGroup $parent_group = null,
+        ?RouteGroup $parentGroup = null,
         ?string $name = null
     ): RouteGroup {
         $group = new RouteGroup($prefix ?: '', $name);
 
-        if ($parent_group) {
-            $parent_group->addGroup($group);
+        if ($parentGroup) {
+            $parentGroup->addGroup($group);
         }
 
         return $group;
+    }
+
+    /**
+     * Add route
+     *
+     * @param Route $route
+     * @return RouteCollector
+     */
+    public function addRoute(Route $route): RouteCollector
+    {
+        $this->collection[] = $route;
+        return $this;
+    }
+
+    /**
+     * Add route group
+     *
+     * @param RouteGroup $group
+     * @return RouteCollector
+     */
+    public function addGroup(RouteGroup $group): RouteCollector
+    {
+        $this->collection[] = $group;
+        return $this;
+    }
+
+    /**
+     * Create a new route
+     * 
+     * @param string $method 
+     * @param string $path 
+     * @param callable|string $handle 
+     * @param null|string $name 
+     * @return RouteCollector 
+     */
+    public function map(
+        string $method,
+        string $path,
+        callable|string $handle,
+        ?string $name = null
+    ): RouteCollector {
+        $route = new Route($method, $path, $handle, $name);
+        $this->addRoute($route);
+
+        return $this;
     }
 
     /**
@@ -122,7 +121,7 @@ class RouteCollector
      * @param string $name 
      * @return RouteInterface|RouteGroup|null 
      */
-    public function getByName(string $name)
+    public function getByName(string $name): RouteInterface|RouteGroup|null
     {
         foreach ($this->collection as $item) {
             if ($item->getName() == $name) {

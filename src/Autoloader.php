@@ -2,8 +2,9 @@
 
 namespace Framework;
 
-/**
- * PSR-4 Autoloader Class.
+/** 
+ * PSR-4 Autoloader Class
+ * @package Framework 
  */
 class Autoloader
 {
@@ -13,14 +14,14 @@ class Autoloader
      *
      * @var array
      */
-    protected $prefixes = [];
+    protected array $prefixes = [];
 
     /**
      * Register loader with SPL autoloader stack.
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         spl_autoload_register([$this, 'loadClass']);
     }
@@ -40,7 +41,7 @@ class Autoloader
         ?string $prefix,
         string $base_dir,
         bool $prepend = false
-    ) {
+    ): void {
         // normalize namespace prefix
         $prefix = trim($prefix, '\\') . '\\';
 
@@ -67,7 +68,7 @@ class Autoloader
      * @return mixed The mapped file name on success, or boolean false on
      * failure.
      */
-    public function loadClass(string $class)
+    public function loadClass(string $class): mixed
     {
         // the current namespace prefix
         $prefix = $class;

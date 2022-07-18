@@ -4,26 +4,21 @@ namespace Framework\View;
 
 use Framework\Contracts\View\ViewEngineInterface;
 use Framework\Contracts\View\ViewInterface;
+use Stringable;
 
-class View implements ViewInterface
+class View implements ViewInterface, Stringable
 {
-    /** @var ViewEngineInterface $engine */
-    private $engine;
-
-    /** @var string $path Absolute path to the view file */
-    private $path;
-
-    /** @var array|null $data */
-    private $data;
-
+    /**
+     * @param ViewEngineInterface $engine 
+     * @param string $path Absolute path to the view file
+     * @param null|array $data 
+     * @return void 
+     */
     public function __construct(
-        ViewEngineInterface $engine,
-        string $path,
-        ?array $data = null
+        private ViewEngineInterface $engine,
+        private string $path,
+        private ?array $data = null
     ) {
-        $this->engine = $engine;
-        $this->path = $path;
-        $this->data = $data;
     }
 
     /**
@@ -39,7 +34,7 @@ class View implements ViewInterface
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }

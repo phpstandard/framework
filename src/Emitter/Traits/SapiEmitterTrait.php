@@ -19,10 +19,10 @@ trait SapiEmitterTrait
     /**
      * Assert either that no headers been sent or the output buffer contains no 
      * content.
-     *
+     * 
      * @return void
      */
-    private function assertNoPreviousOutput()
+    private function assertNoPreviousOutput(): void
     {
         $file = null;
         $line = null;
@@ -41,9 +41,9 @@ trait SapiEmitterTrait
      *
      * Emits the status line using the protocol version and status code from
      * the response; if a reason phrase is available, it, too, is emitted.
-     *
-     * @param ResponseInterface $response
-     * @return void
+     * 
+     * @param ResponseInterface $response 
+     * @return void 
      */
     private function emitStatusLine(ResponseInterface $response): void
     {
@@ -68,9 +68,9 @@ trait SapiEmitterTrait
      * is an array with multiple values, ensures that each is sent
      * in such a way as to create aggregate headers (instead of replace
      * the previous).
-     *
-     * @param ResponseInterface $response
-     * @return void
+     * 
+     * @param ResponseInterface $response 
+     * @return void 
      */
     private function emitHeaders(ResponseInterface $response): void
     {
@@ -95,9 +95,9 @@ trait SapiEmitterTrait
      * Normalize the a header name
      * 
      * Normalized header will be in the following format: Example-Header-Name
-     *
-     * @param string $header_name
-     * @return string
+     * 
+     * @param string $header_name 
+     * @return string 
      */
     private function normalizeHeaderName(string $header_name): string
     {

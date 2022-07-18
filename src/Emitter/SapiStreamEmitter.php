@@ -12,16 +12,22 @@ use function substr;
 use function preg_match;
 use const CONNECTION_NORMAL;
 
+/** @package Framework\Emitter */
 class SapiStreamEmitter implements EmitterInterface
 {
     use SapiEmitterTrait;
 
-    /** @var int $maxBufferSize Max size of the buffer size. Positive integer */
-    private $maxBufferSize;
+    /** Max size of the buffer size. Positive integer */
+    private int $maxBufferSize;
 
-    public function __construct(int $max_buffer_size = 8192)
+    /**
+     * @param int $maxBufferSize 
+     * @return void 
+     * @throws EmitterException 
+     */
+    public function __construct(int $maxBufferSize = 8192)
     {
-        $this->setMaxBufferSize($max_buffer_size);
+        $this->setMaxBufferSize($maxBufferSize);
     }
 
     /**
@@ -36,17 +42,18 @@ class SapiStreamEmitter implements EmitterInterface
 
     /**
      * Set the value of max buffer size
-     *
-     * @return  self
+     * 
+     * @param int $maxBufferSize 
+     * @return SapiStreamEmitter 
+     * @throws EmitterException 
      */
-    public function setMaxBufferSize(int $max_buffer_size): self
+    public function setMaxBufferSize(int $maxBufferSize): SapiStreamEmitter
     {
-        if (!$max_buffer_size < 1) {
+        if (!$maxBufferSize < 1) {
             throw new EmitterException('Buffer size must be positive integer');
         }
 
-        $this->maxBufferSize = $max_buffer_size;
-
+        $this->maxBufferSize = $maxBufferSize;
         return $this;
     }
 
@@ -56,7 +63,6 @@ class SapiStreamEmitter implements EmitterInterface
     public function emit(ResponseInterface $response): void
     {
         $this->assertNoPreviousOutput();
-
         $this->emitStatusLine($response);
         $this->emitHeaders($response);
         $this->emitStream($response);
@@ -127,8 +133,7 @@ class SapiStreamEmitter implements EmitterInterface
 
         if ($body->isSeekable()) {
             $body->seek($start);
-
-            $start = 0; //?
+            $start = 0;
         }
 
         if (!$body->isReadable()) {
@@ -171,11 +176,13 @@ class SapiStreamEmitter implements EmitterInterface
     private function getContentRange(ResponseInterface $response): ?ContentRange
     {
         $header_line = $response->getHeaderLine('Content-Range');
+        $pattern =
+            '/(?P<unit>[\w]+)\s+(?P<start>\d+)-(?P<end>\d+)\/(?P<size>\d+|\*)/';
 
         if (
             !$header_line
             || !preg_match(
-                '/(?P<unit>[\w]+)\s+(?P<start>\d+)-(?P<end>\d+)\/(?P<size>\d+|\*)/',
+                $pattern,
                 $header_line,
                 $matches
             )

@@ -2,6 +2,7 @@
 
 namespace Framework\Contracts\View;
 
+/** @package Framework\Contracts\View */
 interface ViewInterface
 {
     /**

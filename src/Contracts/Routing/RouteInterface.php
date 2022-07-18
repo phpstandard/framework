@@ -5,6 +5,7 @@ namespace Framework\Contracts\Routing;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+/** @package Framework\Contracts\Routing */
 interface RouteInterface
 {
     /**

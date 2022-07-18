@@ -17,19 +17,11 @@ use Framework\Contracts\Support\CallbackResolverInterface;
 use Framework\Contracts\Support\MiddlewareResolverInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+/** @package Framework\Routing */
 class Dispatcher implements DispatcherInterface
 {
-    /** @var RouteCollector $collector */
-    private $collector;
-
-    /** @var CallbackResolverInterface $resolver */
-    private $callbackResolver;
-
-    /** @var MiddlewareResolverInterface $middlewareResolver */
-    private $middlewareResolver;
-
     /** @var string[] Array of the match types  */
-    protected $matchTypes = [
+    protected array $matchTypes = [
         'i'  => '[0-9]++', // Integer
         'a'  => '[0-9A-Za-z]++', // Alphanumeric
         'h'  => '[0-9A-Fa-f]++', // Hexadecimal
@@ -39,14 +31,17 @@ class Dispatcher implements DispatcherInterface
         ''   => '[^/\.]++'
     ];
 
+    /**
+     * @param RouteCollector $collector 
+     * @param MiddlewareResolverInterface $middlewareResolver 
+     * @param CallbackResolverInterface $callbackResolver 
+     * @return void 
+     */
     public function __construct(
-        RouteCollector $collector,
-        MiddlewareResolverInterface $middleware_resolver,
-        CallbackResolverInterface $callback_resolver
+        private RouteCollector $collector,
+        private MiddlewareResolverInterface $middlewareResolver,
+        private CallbackResolverInterface $callbackResolver
     ) {
-        $this->collector = $collector;
-        $this->middlewareResolver = $middleware_resolver;
-        $this->callbackResolver = $callback_resolver;
     }
 
     /**
@@ -69,29 +64,31 @@ class Dispatcher implements DispatcherInterface
     }
 
     /**
-     * @param string $request_url 
-     * @param string $request_method 
+     * @param string $url 
+     * @param string $method 
      * @return null|Route 
      */
-    private function matchRoute(string $request_url, string $request_method): ?Route
-    {
+    private function matchRoute(
+        string $url,
+        string $method
+    ): ?Route {
         $params = [];
         $routes = $this->collector->getRoutes();
 
         // Strip query string (?a=b) from Request Url
-        if (($strpos = strpos($request_url, '?')) !== false) {
-            $request_url = substr($request_url, 0, $strpos);
+        if (($strpos = strpos($url, '?')) !== false) {
+            $url = substr($url, 0, $strpos);
         }
 
         // Last character of the request url
-        $last_char = $request_url ? $request_url[strlen($request_url) - 1] : '';
+        $lastChar = $url ? $url[strlen($url) - 1] : '';
 
         foreach ($routes as $route) {
             $methods = explode("|", $route->getMethod());
             $path = $route->getPath();
 
             // Method did not match, continue to next route.
-            if (!in_array($request_method, $methods)) {
+            if (!in_array($method, $methods)) {
                 continue;
             }
 
@@ -101,19 +98,23 @@ class Dispatcher implements DispatcherInterface
             } elseif (isset($path[0]) && $path[0] === '@') {
                 // @ regex delimiter
                 $pattern = '`' . substr($path, 1) . '`u';
-                $match = preg_match($pattern, $request_url, $params) === 1;
+                $match = preg_match($pattern, $url, $params) === 1;
             } elseif (($position = strpos($path, '[')) === false) {
                 // No params in url, do string comparison
-                $match = strcmp($request_url, $path) === 0;
+                $match = strcmp($url, $path) === 0;
             } else {
-                // Compare longest non-param string with url before moving on to regex
-                // Check if last character before param is a slash, because it could be optional if param is optional too
-                if (strncmp($request_url, $path, $position) !== 0 && ($last_char === '/' || $path[$position - 1] !== '/')) {
+                // Compare longest non-param string with url before moving on to
+                // regex. Check if last character before param is a slash, 
+                // because it could be optional if param is optional too
+                if (
+                    strncmp($url, $path, $position) !== 0
+                    && ($lastChar === '/' || $path[$position - 1] !== '/')
+                ) {
                     continue;
                 }
 
                 $regex = $this->compilePath($path);
-                $match = preg_match($regex, $request_url, $params) === 1;
+                $match = preg_match($regex, $url, $params) === 1;
             }
 
             if ($match) {
@@ -135,12 +136,13 @@ class Dispatcher implements DispatcherInterface
     /**
      * Compile the regex for a given route path (EXPENSIVE)
      * 
-     * @param $path
-     * @return string
+     * @param string $path 
+     * @return string 
      */
-    protected function compilePath($path)
+    protected function compilePath(string $path): string
     {
-        if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $path, $matches, PREG_SET_ORDER)) {
+        $pattern = '`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`';
+        if (preg_match_all($pattern, $path, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 list($block, $pre, $type, $param, $optional) = $match;
 
@@ -174,10 +176,11 @@ class Dispatcher implements DispatcherInterface
 
     /**
      * Resolve the middlewares
-     *
-     * @return self
+     * 
+     * @param Route $route 
+     * @return Dispatcher 
      */
-    private function resolveMiddlewares(Route $route): self
+    private function resolveMiddlewares(Route $route): Dispatcher
     {
         $resolved = [];
 
@@ -193,10 +196,11 @@ class Dispatcher implements DispatcherInterface
 
     /**
      * Resolve handle
-     *
-     * @return self
+     * 
+     * @param Route $route 
+     * @return Dispatcher 
      */
-    private function resolveHandler(Route $route): self
+    private function resolveHandler(Route $route): Dispatcher
     {
         $handler = $route->getHandler();
         $handler = $this->callbackResolver->resolve($handler);

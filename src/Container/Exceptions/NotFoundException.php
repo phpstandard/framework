@@ -8,8 +8,15 @@ use Exception;
 use Psr\Container\NotFoundExceptionInterface;
 use Throwable;
 
+/** @package Framework\Container\Exceptions */
 class NotFoundException extends Exception implements NotFoundExceptionInterface
 {
+    /**
+     * @param string $id 
+     * @param int $code 
+     * @param null|Throwable $previous 
+     * @return void 
+     */
     public function __construct(
         string $id,
         int $code = 0,

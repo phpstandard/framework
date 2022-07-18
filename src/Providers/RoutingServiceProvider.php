@@ -15,12 +15,13 @@ use Framework\Support\CallbackResolver;
 use Framework\Support\MiddlewareResolver;
 use Psr\Http\Server\RequestHandlerInterface;
 
+/** @package Framework\Providers */
 class RoutingServiceProvider implements ServiceProviderInterface
 {
     /**
      * @inheritDoc
      */
-    public function register(ContainerInterface $container)
+    public function register(ContainerInterface $container): void
     {
         $container
             ->set(EmitterInterface::class, SapiEmitter::class, true)

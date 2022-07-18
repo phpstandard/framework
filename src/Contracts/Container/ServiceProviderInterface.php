@@ -4,6 +4,7 @@ namespace Framework\Contracts\Container;
 
 use Framework\Contracts\Container\ContainerInterface;
 
+/** @package Framework\Contracts\Container */
 interface ServiceProviderInterface
 {
     /**
@@ -12,5 +13,5 @@ interface ServiceProviderInterface
      * @param ContainerInterface $container
      * @return void
      */
-    public function register(ContainerInterface $container);
+    public function register(ContainerInterface $container): void;
 }

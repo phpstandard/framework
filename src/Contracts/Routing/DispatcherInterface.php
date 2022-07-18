@@ -4,6 +4,7 @@ namespace Framework\Contracts\Routing;
 
 use Psr\Http\Message\ServerRequestInterface;
 
+/** @package Framework\Contracts\Routing */
 interface DispatcherInterface
 {
     /**

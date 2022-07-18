@@ -6,6 +6,7 @@ namespace Framework\Contracts\Emitter;
 
 use Psr\Http\Message\ResponseInterface;
 
+/** @package Framework\Contracts\Emitter */
 interface EmitterInterface
 {
     /**

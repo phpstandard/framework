@@ -6,25 +6,20 @@ use Throwable;
 
 use function sprintf;
 
+/** @package Framework\Emitter\Exceptions */
 class HeadersAlreadySentException extends EmitterException
 {
     /**
-     * PHP source file name where output started in.
-     *
-     * @var string
+     * @param string $file PHP source file name where output started in
+     * @param null|string $line Line number in the PHP source file name where 
+     * output started in
+     * @param int $code 
+     * @param null|Throwable $previous 
+     * @return void 
      */
-    private $file;
-
-    /**
-     * Line number in the PHP source file name where output started in
-     *
-     * @var string
-     */
-    private $line;
-
     public function __construct(
-        string $file,
-        ?string $line,
+        private string $file,
+        private ?string $line,
         int $code = 0,
         ?Throwable $previous = null
     ) {
@@ -37,7 +32,7 @@ class HeadersAlreadySentException extends EmitterException
      *
      * @return  string
      */
-    public function getHeadersSentFile()
+    public function getHeadersSentFile(): string
     {
         return $this->file;
     }
@@ -47,7 +42,7 @@ class HeadersAlreadySentException extends EmitterException
      *
      * @return  string
      */
-    public function getHeadersSentLine()
+    public function getHeadersSentLine(): string
     {
         return $this->line;
     }

@@ -2,6 +2,7 @@
 
 namespace Framework\Contracts\View;
 
+/** @package Framework\Contracts\View */
 interface ViewEngineFactoryInterface
 {
     /**
@@ -17,7 +18,10 @@ interface ViewEngineFactoryInterface
      *
      * @param string $extention
      * @param ViewEngineInterface|string $engine
-     * @return self
+     * @return ViewEngineFactoryInterface
      */
-    public function addEngine(string $extention, $engine): self;
+    public function addEngine(
+        string $extention,
+        ViewEngineInterface|string $engine
+    ): ViewEngineFactoryInterface;
 }

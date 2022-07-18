@@ -6,6 +6,7 @@ namespace Framework\EventDispatcher;
 
 use Psr\EventDispatcher\StoppableEventInterface;
 
+/** @package Framework\EventDispatcher */
 abstract class AbstractStoppableEvent implements StoppableEventInterface
 {
     /**
@@ -24,7 +25,8 @@ abstract class AbstractStoppableEvent implements StoppableEventInterface
         return $this->isPropagationStopped;
     }
 
-    public function stopPropagation()
+    /** @return void  */
+    public function stopPropagation(): void
     {
         $this->isPropagationStopped = true;
     }

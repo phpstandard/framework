@@ -7,31 +7,25 @@ use Framework\Contracts\Container\ContainerInterface;
 use Framework\Contracts\Container\ServiceProviderInterface;
 use Framework\Contracts\Core\ApplicationInterface;
 use Framework\Contracts\Core\BootstrapperInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Psr\Container\ContainerExceptionInterface;
 
+/** @package Framework\Core */
 class Application implements ApplicationInterface
 {
-    /** @var ContainerInterface $container */
-    private $container;
-
-    /** @var (ServiceProviderInterface|string)[]|null */
-    private $providers;
-
-    /** @var (BootstrapperInterface|string)[]|null */
-    private $bootstrappers;
-
-    /** @var string $basePath Base (root) path of the app */
-    private $basePath;
-
+    /**
+     * @param ContainerInterface $container 
+     * @param (ServiceProviderInterface|string)[]|null $providers 
+     * @param (BootstrapperInterface|string)[]|null $bootstrappers 
+     * @param null|string $basePath Base (root) path of the app
+     * @return void 
+     */
     public function __construct(
-        ContainerInterface $container,
-        ?array $providers = null,
-        ?array $bootstrappers = null,
-        ?string $base_path = null
+        private ContainerInterface $container,
+        private ?array $providers = null,
+        private ?array $bootstrappers = null,
+        private ?string $basePath = null
     ) {
-        $this->container = $container;
-        $this->providers = $providers;
-        $this->bootstrappers = $bootstrappers;
-        $this->basePath = $base_path;
     }
 
     /**
@@ -55,8 +49,9 @@ class Application implements ApplicationInterface
     /**
      * @inheritDoc
      */
-    public function addServiceProvider($provider): ApplicationInterface
-    {
+    public function addServiceProvider(
+        ServiceProviderInterface|string $provider
+    ): ApplicationInterface {
         if (is_null($this->providers)) {
             $this->providers = [];
         }
@@ -68,8 +63,9 @@ class Application implements ApplicationInterface
     /**
      * @inheritDoc
      */
-    public function addBootstrapper($bootstrapper): ApplicationInterface
-    {
+    public function addBootstrapper(
+        BootstrapperInterface|string $bootstrapper
+    ): ApplicationInterface {
         if (is_null($this->bootstrappers)) {
             $this->bootstrappers = [];
         }
@@ -98,7 +94,7 @@ class Application implements ApplicationInterface
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function boot(): void
     {
         $this->invokeServiceProviders();
         $this->invokeBootstrappers();
@@ -106,8 +102,11 @@ class Application implements ApplicationInterface
 
     /**
      * Invoke service providers
-     *
-     * @return void
+     * 
+     * @return void 
+     * @throws NotFoundExceptionInterface 
+     * @throws ContainerExceptionInterface 
+     * @throws Exception 
      */
     private function invokeServiceProviders()
     {
@@ -134,8 +133,11 @@ class Application implements ApplicationInterface
 
     /**
      * Invoke bootstrappers
-     *
-     * @return void
+     * 
+     * @return void 
+     * @throws NotFoundExceptionInterface 
+     * @throws ContainerExceptionInterface 
+     * @throws Exception 
      */
     private function invokeBootstrappers()
     {

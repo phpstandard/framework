@@ -5,19 +5,20 @@ namespace Framework\View;
 use Framework\Contracts\View\ViewFinderInterface;
 use InvalidArgumentException;
 
+/** @package Framework\View */
 class ViewFinder implements ViewFinderInterface
 {
     /** @var array $namespaces Array of the namespaces */
-    private $namespaces = [];
+    private array $namespaces = [];
 
     /** @var string[] $paths Array of the paths without namespace to look for views */
-    private $paths = [];
+    private array $paths = [];
 
     /** @var array $views An aray of name => path of the already found views */
-    private $views = [];
+    private array $views = [];
 
     /** @var string[] $extensions Array of the extentions */
-    private $extensions = [];
+    private array $extensions = [];
 
     /**
      * @inheritDoc
@@ -106,18 +107,22 @@ class ViewFinder implements ViewFinderInterface
      * Parse view name into namespace and the actual view name
      *
      * @param string $name
-     * @return array
+     * @return array<string,string>
      */
     private function parseNamespaceSegments(string $name): array
     {
         $segments = explode(self::NAMESPACE_DELIMITER, $name);
 
         if (count($segments) !== 2) {
-            throw new InvalidArgumentException('View ' . $name . ' has an invalid name');
+            throw new InvalidArgumentException(
+                'View ' . $name . ' has an invalid name'
+            );
         }
 
         if (!isset($this->namespaces[$segments[0]])) {
-            throw new InvalidArgumentException('View ' . $name . ' has an undefined namespace');
+            throw new InvalidArgumentException(
+                'View ' . $name . ' has an undefined namespace'
+            );
         }
 
         return $segments;
@@ -134,20 +139,20 @@ class ViewFinder implements ViewFinderInterface
         string $name,
         array $paths
     ): string {
-        $possible_file_names = $this->getPossibleFileNames($name);
+        $possibleFileNames = $this->getPossibleFileNames($name);
 
         foreach ($paths as $path) {
             // Check if the file exists without appending the extension
-            $full_path = $path . '/' . $name;
-            if (file_exists($full_path)) {
-                return $full_path;
+            $fullPath = $path . '/' . $name;
+            if (file_exists($fullPath)) {
+                return $fullPath;
             }
 
-            foreach ($possible_file_names as $file_name) {
-                $full_path = $path . '/' . $file_name;
+            foreach ($possibleFileNames as $fileName) {
+                $fullPath = $path . '/' . $fileName;
 
-                if (file_exists($full_path)) {
-                    return $full_path;
+                if (file_exists($fullPath)) {
+                    return $fullPath;
                 }
             }
         }
@@ -160,7 +165,7 @@ class ViewFinder implements ViewFinderInterface
      * the possible extensions to the name
      *
      * @param string $name
-     * @return array
+     * @return string[]
      */
     private function getPossibleFileNames(string $name): array
     {

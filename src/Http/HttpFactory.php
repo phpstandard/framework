@@ -29,6 +29,7 @@ use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 
+/** @package Framework\Http */
 class HttpFactory implements
     RequestFactoryInterface,
     ResponseFactoryInterface,
@@ -37,23 +38,24 @@ class HttpFactory implements
     UploadedFileFactoryInterface,
     UriFactoryInterface
 {
-    /** @var RequestFactoryInterface $requestFactory */
-    private $requestFactory;
-
-    /** @var ResponseFactoryInterface $responseFactory */
-    private $responseFactory;
-
-    /** @var ServerRequestFactoryInterface $serverRequestFactory */
-    private $serverRequestFactory;
-
-    /** @var StreamFactoryInterface $streamFactory */
-    private $streamFactory;
-
-    /** @var UploadedFileFactoryInterface $uploadedFileFactory */
-    private $uploadedFileFactory;
-
-    /** @var UriFactoryInterface $uriFactory */
-    private $uriFactory;
+    /**
+     * @param null|RequestFactoryInterface $requestFactory 
+     * @param null|ResponseFactoryInterface $responseFactory 
+     * @param null|ServerRequestFactoryInterface $serverRequestFactory 
+     * @param null|StreamFactoryInterface $streamFactory 
+     * @param null|UploadedFileFactoryInterface $uploadedFileFactory 
+     * @param null|UriFactoryInterface $uriFactory 
+     * @return void 
+     */
+    public function __construct(
+        private ?RequestFactoryInterface $requestFactory = null,
+        private ?ResponseFactoryInterface $responseFactory = null,
+        private ?ServerRequestFactoryInterface $serverRequestFactory = null,
+        private ?StreamFactoryInterface $streamFactory = null,
+        private ?UploadedFileFactoryInterface $uploadedFileFactory = null,
+        private ?UriFactoryInterface $uriFactory = null
+    ) {
+    }
 
     /**
      * @inheritDoc
@@ -112,8 +114,10 @@ class HttpFactory implements
     /**
      * @inheritDoc
      */
-    public function createStreamFromFile(string $filename, string $mode = 'r'): StreamInterface
-    {
+    public function createStreamFromFile(
+        string $filename,
+        string $mode = 'r'
+    ): StreamInterface {
         if (!$this->streamFactory) {
             $this->streamFactory = new StreamFactory;
         }

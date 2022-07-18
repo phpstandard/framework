@@ -7,63 +7,32 @@ use Framework\Routing\Traits\MiddlewareAwareTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+/** @package Framework\Routing */
 class Route implements RouteInterface
 {
     use MiddlewareAwareTrait;
-
-    /**
-     * Route method
-     *
-     * @var string
-     */
-    private $method;
-
-    /**
-     * Route path
-     *
-     * @var string
-     */
-    private $path;
-
-    /**
-     * Route handler
-     *
-     * @var callable|string
-     */
-    private $handler;
-
-    /**
-     * Route name
-     *
-     * @var string|null
-     */
-    private $name;
 
     /**
      * Route parameters
      *
      * @var array
      */
-    private $params = [];
+    private array $params = [];
 
     /**
-     * Route constructor
-     *
-     * @param string $method
-     * @param string $path
-     * @param callable|string $handler
-     * @return void
+     * @param string $method 
+     * @param string $path 
+     * @param callable|string $handler 
+     * @param null|string $name 
+     * @return void 
      */
     public function __construct(
-        string $method,
-        string $path,
-        $handler,
-        ?string $name = null
+        private string $method,
+        private string $path,
+        private callable|string $handler,
+        private ?string $name = null
     ) {
-        $this->setMethod($method)
-            ->setPath($path)
-            ->setHandler($handler)
-            ->setName($name);
+        $this->setPath($path);
     }
 
     /**
@@ -78,15 +47,13 @@ class Route implements RouteInterface
 
     /**
      * Set route method
-     *
-     * @param  string  $method  Route method
-     *
-     * @return  self
+     * 
+     * @param string $method 
+     * @return Route 
      */
-    public function setMethod(string $method): self
+    public function setMethod(string $method): Route
     {
         $this->method = $method;
-
         return $this;
     }
 
@@ -103,27 +70,25 @@ class Route implements RouteInterface
     /**
      * Set route path
      *
-     * @param  string  $path  Route path
-     *
-     * @return  self
+     * @param string $path Route path
+     * @return Route
      */
-    public function setPath(string $path): self
+    public function setPath(string $path): Route
     {
         if ($path != '*' && substr($path, -4) !== '[/]?') {
             $path = rtrim($path, '/') . '[/]?';
         }
 
         $this->path = $path;
-
         return $this;
     }
 
     /**
      * Get route handler
      *
-     * @return  callable|string
+     * @return callable|string
      */
-    public function getHandler()
+    public function getHandler(): callable|string
     {
         return $this->handler;
     }
@@ -131,21 +96,19 @@ class Route implements RouteInterface
     /**
      * Set route handler
      *
-     * @param  callable|string|null  $handler  Route handler
-     *
-     * @return  self
+     * @param callable|string|null $handler Route handler
+     * @return Route
      */
-    public function setHandler($handler): self
+    public function setHandler(callable|string|null $handler): Route
     {
         $this->handler = $handler;
-
         return $this;
     }
 
     /**
      * Get route name
      *
-     * @return  string|null
+     * @return string|null
      */
     public function getName(): ?string
     {
@@ -156,13 +119,11 @@ class Route implements RouteInterface
      * Set route name
      *
      * @param  string|null  $name  Route name
-     *
      * @return  self
      */
     public function setName(?string $name)
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -181,9 +142,9 @@ class Route implements RouteInterface
      *
      * @param string $key
      * @param mixed $value
-     * @return self
+     * @return Route
      */
-    public function addParam(string $key, $value): self
+    public function addParam(string $key, $value): Route
     {
         $this->params[$key] = $value;
         return $this;

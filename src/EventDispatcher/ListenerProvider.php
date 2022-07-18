@@ -9,6 +9,7 @@ use Framework\Support\CallbackResolver;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 
+/** @package Framework\EventDispatcher */
 class ListenerProvider implements ListenerProviderInterface
 {
     /**
@@ -19,11 +20,7 @@ class ListenerProvider implements ListenerProviderInterface
     public const PRIORITY_NORMAL = 50;
     public const PRIORITY_HIGH = 100;
 
-    /** @var ContainerInterface $container */
-    private $container;
-
-    /** @var CallbackResolverInterface $resolver */
-    private $resolver;
+    private CallbackResolverInterface $resolver;
 
     /**
      * An associative array of the listener wrappers
@@ -31,13 +28,17 @@ class ListenerProvider implements ListenerProviderInterface
      *
      * @var array
      */
-    private $wrappers = [];
+    private array $wrappers = [];
 
+    /**
+     * @param ContainerInterface $container 
+     * @param null|CallbackResolverInterface $resolver 
+     * @return void 
+     */
     public function __construct(
-        ContainerInterface $container,
+        private ContainerInterface $container,
         ?CallbackResolverInterface $resolver = null
     ) {
-        $this->container = $container;
         $this->resolver = $resolver ?: new CallbackResolver($this->container);
     }
 
@@ -50,23 +51,21 @@ class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * Add an event listener
-     *
-     * @param string $event_type
-     * @param string|callable $listener
-     * @param integer $priority
-     * @return self
+     * @param string $eventType 
+     * @param string|callable $listener 
+     * @param int $priority 
+     * @return ListenerProvider 
      */
     public function addEventListener(
-        string $event_type,
-        $listener,
+        string $eventType,
+        string|callable $listener,
         int $priority = self::PRIORITY_NORMAL
-    ): self {
-        if (!isset($this->wrappers[$event_type])) {
-            $this->wrappers[$event_type] = [];
+    ): ListenerProvider {
+        if (!isset($this->wrappers[$eventType])) {
+            $this->wrappers[$eventType] = [];
         }
 
-        $this->wrappers[$event_type][] = new ListenerWrapper(
+        $this->wrappers[$eventType][] = new ListenerWrapper(
             $listener,
             $priority,
             false
@@ -79,11 +78,11 @@ class ListenerProvider implements ListenerProviderInterface
      * @see addEventListener
      */
     public function on(
-        string $event_type,
-        $listener,
+        string $eventType,
+        string|callable $listener,
         int $priority = self::PRIORITY_NORMAL
-    ): self {
-        return $this->addEventListener($event_type, $listener, $priority);
+    ): ListenerProvider {
+        return $this->addEventListener($eventType, $listener, $priority);
     }
 
     /**
@@ -116,27 +115,27 @@ class ListenerProvider implements ListenerProviderInterface
      */
     private function getWrappers(object $event): iterable
     {
-        $all_wrappers = [];
+        $allWrappers = [];
 
         foreach ($this->wrappers as $event_type => $wrappers) {
             if (!$event instanceof $event_type) {
                 continue;
             }
 
-            $all_wrappers = array_merge($all_wrappers, $wrappers);
+            $allWrappers = array_merge($allWrappers, $wrappers);
         }
 
-        $this->sortWrappers($all_wrappers);
-        yield from $all_wrappers;
+        $allWrappers = $this->sortWrappers(...$allWrappers);
+        yield from $allWrappers;
     }
 
     /**
      * Sort listener wrappers by descending order priority
-     *
+     * 
      * @param ListenerWrapper[] $wrappers
      * @return void
      */
-    private function sortWrappers(array &$wrappers): void
+    private function sortWrappers(ListenerWrapper ...$wrappers): void
     {
         usort(
             $wrappers,

@@ -4,43 +4,26 @@ declare(strict_types=1);
 
 namespace Framework\EventDispatcher;
 
+/** @package Framework\EventDispatcher */
 class ListenerWrapper
 {
     /**
-     * Listener priority
-     *
-     * @var int
+     * @param string|callable $listener Listener callback
+     * @param int $priority Listener priority
+     * @param bool $isResolved Whether listener's callback is resolved or not
+     * @return void 
      */
-    private $priority;
-
-    /**
-     * Listener callback
-     *
-     * @var string|callable
-     */
-    private $listener;
-
-    /**
-     * Whether listener's callback is resolved or not
-     *
-     * @var bool
-     */
-    private $isResolved;
-
     public function __construct(
-        $listener,
-        int $priority,
-        bool $isResolved = false
+        private string|callable $listener,
+        private int $priority,
+        private bool $isResolved = false
     ) {
-        $this->setListener($listener)
-            ->setPriority($priority)
-            ->setIsResolved($isResolved);
     }
 
     /**
      * Get listener priority
      *
-     * @return  int
+     * @return int
      */
     public function getPriority(): int
     {
@@ -50,23 +33,21 @@ class ListenerWrapper
     /**
      * Set listener priority
      *
-     * @param  int  $priority  Listener priority
-     *
-     * @return  self
+     * @param int $priority Listener priority
+     * @return ListenerWrapper
      */
-    public function setPriority(int $priority): self
+    public function setPriority(int $priority): ListenerWrapper
     {
         $this->priority = $priority;
-
         return $this;
     }
 
     /**
      * Get listener callback
      *
-     * @return  string|callable
+     * @return string|callable
      */
-    public function getListener()
+    public function getListener(): string|callable
     {
         return $this->listener;
     }
@@ -74,21 +55,19 @@ class ListenerWrapper
     /**
      * Set listener callback
      *
-     * @param  string|callable  $listener  Listener callback
-     *
-     * @return  self
+     * @param string|callable  $listener Listener callback
+     * @return ListenerWrapper
      */
-    public function setListener($listener): self
+    public function setListener(string|callable $listener): ListenerWrapper
     {
         $this->listener = $listener;
-
         return $this;
     }
 
     /**
      * Get whether listener's callback is resolved or not
-     *
-     * @return  bool
+     * 
+     * @return bool
      */
     public function getIsResolved(): bool
     {
@@ -98,14 +77,12 @@ class ListenerWrapper
     /**
      * Set whether listener's callback is resolved or not
      *
-     * @param  bool  $isResolved  Whether listener's callback is resolved or not
-     *
-     * @return  self
+     * @param bool $isResolved Whether listener's callback is resolved or not
+     * @return ListenerWrapper
      */
-    public function setIsResolved(bool $isResolved): self
+    public function setIsResolved(bool $isResolved): ListenerWrapper
     {
         $this->isResolved = $isResolved;
-
         return $this;
     }
 }

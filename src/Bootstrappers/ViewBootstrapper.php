@@ -7,26 +7,24 @@ use Framework\Contracts\View\ViewEngineFactoryInterface;
 use Framework\Contracts\View\ViewFinderInterface;
 use Framework\View\Engines\PhpViewEngine;
 
+/** @package Framework\Bootstrappers */
 class ViewBootstrapper implements BootstrapperInterface
 {
-    /** @var ViewEngineFactoryInterface $factory */
-    private $factory;
-
-    /** @var ViewFinderInterface $finder */
-    private $finder;
-
+    /**
+     * @param ViewEngineFactoryInterface $factory 
+     * @param ViewFinderInterface $finder 
+     * @return void 
+     */
     public function __construct(
-        ViewEngineFactoryInterface $factory,
-        ViewFinderInterface $finder
+        private ViewEngineFactoryInterface $factory,
+        private ViewFinderInterface $finder
     ) {
-        $this->factory = $factory;
-        $this->finder = $finder;
     }
 
     /**
      * @inheritDoc
      */
-    public function bootstrap()
+    public function bootstrap(): void
     {
         $this->factory
             ->addEngine('php', PhpViewEngine::class)
