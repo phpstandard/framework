@@ -1,0 +1,49 @@
+## Following variables are expected to be predefined by GitLab CI
+## 
+## CI_COMMIT_BRANCH, CI_COMMIT_REF_SLUG, CI_COMMIT_TAG,
+## CI_DEFAULT_BRANCH
+
+stages:
+  - analyse
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .tmp/
+    - vendor/
+
+.mr:
+  stage: analyse
+  image: php:8.0-fpm
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  before_script:
+    - bash ci/docker_install.sh
+
+PHPStan:
+  extends: .mr
+  script: php -d memory_limit=1G vendor/bin/phpstan analyse --no-progress --error-format gitlab > phpstan.json
+  artifacts:
+    when: always
+    reports:
+      codequality: phpstan.json
+
+PHP Code Sniffer:
+  extends: .mr
+  script: php vendor/bin/phpcs -d memory_limit=1G --report="Micheh\PhpCodeSniffer\Report\Gitlab" > phpcs.json
+  artifacts:
+    when: always
+    reports:
+      codequality: phpcs.json
+
+# Hide this task because of the many issues. 
+.PHP Mess Detector:
+  extends: .mr
+  script: vendor/bin/phpmd src "ci\PhpMdGitlabRenderer" .phpmd.xml > phpmd.json
+  artifacts:
+    when: always
+    reports:
+      codequality: phpmd.json
+  
