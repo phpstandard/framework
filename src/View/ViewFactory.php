@@ -33,14 +33,6 @@ class ViewFactory implements ViewFactoryInterface
         string|array $names,
         ?array $data = null
     ): ViewInterface {
-        if (!is_array($names) && !is_string($names)) {
-            throw new InvalidArgumentException(
-                'Argument 1 passed to ' . __METHOD__
-                    . ' must either string or array type. '
-                    . gettype($names) . ' is given.'
-            );
-        }
-
         if (is_string($names)) {
             return $this->createView($names, $data);
         }

@@ -25,11 +25,11 @@ interface ContainerInterface extends PsrContainerInterface
      * Call a method on the instance
      * 
      * @param string|object $instance Class name or instance of the class
-     * @param string $method_name 
+     * @param string $methodName 
      * @return mixed 
      */
     public function callMehtod(
         string|object $instance,
-        string $method_name
+        string $methodName
     ): mixed;
 }

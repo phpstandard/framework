@@ -17,15 +17,12 @@ class SapiStreamEmitter implements EmitterInterface
 {
     use SapiEmitterTrait;
 
-    /** Max size of the buffer size. Positive integer */
-    private int $maxBufferSize;
-
     /**
      * @param int $maxBufferSize 
      * @return void 
      * @throws EmitterException 
      */
-    public function __construct(int $maxBufferSize = 8192)
+    public function __construct(private int $maxBufferSize = 8192)
     {
         $this->setMaxBufferSize($maxBufferSize);
     }
@@ -175,15 +172,15 @@ class SapiStreamEmitter implements EmitterInterface
      */
     private function getContentRange(ResponseInterface $response): ?ContentRange
     {
-        $header_line = $response->getHeaderLine('Content-Range');
+        $headerLine = $response->getHeaderLine('Content-Range');
         $pattern =
             '/(?P<unit>[\w]+)\s+(?P<start>\d+)-(?P<end>\d+)\/(?P<size>\d+|\*)/';
 
         if (
-            !$header_line
+            !$headerLine
             || !preg_match(
                 $pattern,
-                $header_line,
+                $headerLine,
                 $matches
             )
         ) {

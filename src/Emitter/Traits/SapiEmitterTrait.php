@@ -47,18 +47,18 @@ trait SapiEmitterTrait
      */
     private function emitStatusLine(ResponseInterface $response): void
     {
-        $reason_phrase = $response->getReasonPhrase();
-        $status_code = $response->getStatusCode();
-        $protocol_version = $response->getProtocolVersion();
+        $reasonPhrase = $response->getReasonPhrase();
+        $statusCode = $response->getStatusCode();
+        $protocolVersion = $response->getProtocolVersion();
 
         $header = sprintf(
             'HTTP/%s %d%s',
-            $protocol_version,
-            $status_code,
-            ($reason_phrase ? ' ' . $reason_phrase : '')
+            $protocolVersion,
+            $statusCode,
+            ($reasonPhrase ? ' ' . $reasonPhrase : '')
         );
 
-        header($header, true, $status_code);
+        header($header, true, $statusCode);
     }
 
     /**
@@ -74,7 +74,7 @@ trait SapiEmitterTrait
      */
     private function emitHeaders(ResponseInterface $response): void
     {
-        $status_code = $response->getStatusCode();
+        $statusCode = $response->getStatusCode();
 
         foreach ($response->getHeaders() as $name => $values) {
             $name  = $this->normalizeHeaderName($name);
@@ -84,7 +84,7 @@ trait SapiEmitterTrait
             $replace = $name !== 'Set-Cookie';
             foreach ($values as $value) {
                 $header = sprintf('%s: %s', $name, $value);
-                header($header, $replace, $status_code);
+                header($header, $replace, $statusCode);
 
                 $replace = false;
             }
@@ -96,11 +96,11 @@ trait SapiEmitterTrait
      * 
      * Normalized header will be in the following format: Example-Header-Name
      * 
-     * @param string $header_name 
+     * @param string $headerName 
      * @return string 
      */
-    private function normalizeHeaderName(string $header_name): string
+    private function normalizeHeaderName(string $headerName): string
     {
-        return ucwords(strtolower($header_name), '-');
+        return ucwords(strtolower($headerName), '-');
     }
 }

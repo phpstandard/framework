@@ -54,7 +54,7 @@ class Container implements ContainerInterface
 
     /**
      * @param string|object $instance 
-     * @param string $method_name 
+     * @param string $methodName 
      * @return mixed 
      * @throws ContainerException
      * @throws NotFoundException 
@@ -63,16 +63,8 @@ class Container implements ContainerInterface
      */
     public function callMehtod(
         string|object $instance,
-        string $method_name
+        string $methodName
     ): mixed {
-        if (!is_object($instance) && !is_string($instance)) {
-            throw new ContainerException(sprintf(
-                'Argument 1 passed to %s must be type of either string or object. %s passed.',
-                __METHOD__,
-                gettype($instance)
-            ));
-        }
-
         if (is_string($instance)) {
             $instance = $this->get($instance);
         }
@@ -80,11 +72,11 @@ class Container implements ContainerInterface
         $reflector = new ReflectionClass($instance);
 
         try {
-            $method = $reflector->getMethod($method_name);
+            $method = $reflector->getMethod($methodName);
         } catch (Throwable $th) {
             throw new ContainerException(sprintf(
                 "%s does not exists on",
-                get_class($instance) . '::' . $method_name . '()'
+                get_class($instance) . '::' . $methodName . '()'
             ), 0, $th);
         }
 

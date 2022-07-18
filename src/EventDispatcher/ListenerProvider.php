@@ -117,8 +117,8 @@ class ListenerProvider implements ListenerProviderInterface
     {
         $allWrappers = [];
 
-        foreach ($this->wrappers as $event_type => $wrappers) {
-            if (!$event instanceof $event_type) {
+        foreach ($this->wrappers as $eventType => $wrappers) {
+            if (!$event instanceof $eventType) {
                 continue;
             }
 

@@ -8,52 +8,24 @@ use Framework\Emitter\Exceptions\EmitterException;
 class ContentRange
 {
     /**
-     * An integer in the given unit indicating 
-     * the beginning of the request range.
-     * 
-     * @var int
-     */
-    private int $start;
-
-    /**
-     * An integer in the given unit indicating the end of the requested range.
-     * 
-     * @var int
-     */
-    private int $end;
-
-    /**
-     * The total size of the document.
-     * 
-     * @var null|int
-     */
-    private ?int $size;
-
-    /**
-     * The unit in which ranges are specified. This is usually `bytes`.
-     * 
-     * @var string
-     */
-    private string $unit;
-
-    /**
-     * @param int $start 
-     * @param int $end 
-     * @param null|int $size 
-     * @param string $unit 
+     * @param int $start An integer in the given unit indicating the beginning 
+     * of the request range.
+     * @param int $end An integer in the given unit indicating the end of the 
+     * requested range.
+     * @param null|int $size The total size of the document.
+     * @param string $unit The unit in which ranges are specified. This is 
+     * usually `bytes`.
      * @return void 
      * @throws EmitterException 
      */
     public function __construct(
-        int $start,
-        int $end,
-        ?int $size = null,
-        string $unit = 'bytes'
+        private int $start,
+        private int $end,
+        private ?int $size = null,
+        private string $unit = 'bytes'
     ) {
         $this->setStart($start)
-            ->setEnd($end)
-            ->setSize($size)
-            ->setUnit($unit);
+            ->setEnd($end);
     }
 
     /**
