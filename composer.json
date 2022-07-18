@@ -28,5 +28,27 @@
         "platform": {
             "php": "8.0"
         }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.8",
+        "squizlabs/php_codesniffer": "^3.7",
+        "micheh/phpcs-gitlab": "^1.1",
+        "phpmd/phpmd": "^2.12",
+        "phpcompatibility/php-compatibility": "^9.3"
+    },
+    "scripts": {
+        "phpstan": "phpstan analyse",
+        "phpcs": "phpcs -p --report=full",
+        "phpcbf": "phpcbf -v",
+        "phpmd": "phpmd src ansi .phpmd.xml --suffixes=php",
+        "php-compability": "phpcs -p --colors ./src --extensions=php --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0-",
+        "analyse": [
+            "@php-compability",
+            "@phpstan",
+            "@phpcs"
+        ],
+        "fix": [
+            "@phpcbf"
+        ]
     }
 }
