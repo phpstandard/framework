@@ -11,7 +11,7 @@ class ListenerWrapper
      * @param string|callable $listener Listener callback
      * @param int $priority Listener priority
      * @param bool $isResolved Whether listener's callback is resolved or not
-     * @return void 
+     * @return void
      */
     public function __construct(
         private string|callable $listener,
@@ -66,7 +66,7 @@ class ListenerWrapper
 
     /**
      * Get whether listener's callback is resolved or not
-     * 
+     *
      * @return bool
      */
     public function getIsResolved(): bool

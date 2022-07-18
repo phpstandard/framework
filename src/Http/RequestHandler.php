@@ -20,8 +20,8 @@ class RequestHandler implements RequestHandlerInterface
     private ?RouteInterface $route = null;
 
     /**
-     * @param DispatcherInterface $dispatcher 
-     * @return void 
+     * @param DispatcherInterface $dispatcher
+     * @return void
      */
     public function __construct(
         private DispatcherInterface $dispatcher
@@ -30,10 +30,10 @@ class RequestHandler implements RequestHandlerInterface
 
     /**
      * @inheritDoc
-     * 
-     * @param ServerRequestInterface $request 
-     * @return ResponseInterface 
-     * @throws NotFoundException 
+     *
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws NotFoundException
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {

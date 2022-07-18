@@ -7,8 +7,8 @@ interface ViewFactoryInterface
 {
     /**
      * Create a view instance
-     * 
-     * If the $names is array, then the implementation should be in way to 
+     *
+     * If the $names is array, then the implementation should be in way to
      * create a view instance first found view in the names array.
      *
      * @param string|string[] $names

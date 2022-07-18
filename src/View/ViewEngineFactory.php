@@ -17,8 +17,8 @@ class ViewEngineFactory implements ViewEngineFactoryInterface
     private array $engines = [];
 
     /**
-     * @param ContainerInterface $container 
-     * @return void 
+     * @param ContainerInterface $container
+     * @return void
      */
     public function __construct(private ContainerInterface $container)
     {
@@ -26,17 +26,17 @@ class ViewEngineFactory implements ViewEngineFactoryInterface
 
     /**
      * @inheritDoc
-     * @throws NotFoundExceptionInterface 
-     * @throws ContainerExceptionInterface 
-     * @throws Exception 
-     * @throws InvalidArgumentException 
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function getEngine(string $path): ViewEngineInterface
     {
         foreach ($this->engines as $ext => $engine) {
             $ext = '.' . $ext;
 
-            if (substr($path,  -strlen($ext)) === $ext) {
+            if (substr($path, -strlen($ext)) === $ext) {
                 if (is_string($engine)) {
                     $engine = $this->container->get($engine);
                 }

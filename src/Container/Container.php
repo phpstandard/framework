@@ -28,11 +28,11 @@ class Container implements ContainerInterface
 
     /**
      * Set container definition
-     * 
-     * @param string $abstract 
-     * @param mixed $concrete 
-     * @param bool $shared 
-     * @return ContainerInterface 
+     *
+     * @param string $abstract
+     * @param mixed $concrete
+     * @param bool $shared
+     * @return ContainerInterface
      */
     public function set(
         string $abstract,
@@ -53,13 +53,13 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @param string|object $instance 
-     * @param string $methodName 
-     * @return mixed 
+     * @param string|object $instance
+     * @param string $methodName
+     * @return mixed
      * @throws ContainerException
-     * @throws NotFoundException 
-     * @throws Throwable 
-     * @throws ReflectionException 
+     * @throws NotFoundException
+     * @throws Throwable
+     * @throws ReflectionException
      */
     public function callMehtod(
         string|object $instance,
@@ -121,13 +121,13 @@ class Container implements ContainerInterface
 
     /**
      * Resolve entry
-     * 
-     * @param string $id 
-     * @return mixed 
+     *
+     * @param string $id
+     * @return mixed
      * @throws ContainerException
-     * @throws ReflectionException 
+     * @throws ReflectionException
      * @throws NotFoundException
-     * @throws Throwable 
+     * @throws Throwable
      */
     private function resolve(string $id)
     {
@@ -174,7 +174,7 @@ class Container implements ContainerInterface
 
     /**
      * Get a ReflectionClass object representing the entry's class
-     * 
+     *
      * @param string $entry
      * @return ReflectionClass
      */
@@ -185,13 +185,13 @@ class Container implements ContainerInterface
 
     /**
      * Get an instance for the entry
-     * 
-     * @param ReflectionClass $item 
-     * @return object|null 
-     * @throws ContainerException 
-     * @throws ReflectionException 
-     * @throws NotFoundException 
-     * @throws Throwable 
+     *
+     * @param ReflectionClass $item
+     * @return object|null
+     * @throws ContainerException
+     * @throws ReflectionException
+     * @throws NotFoundException
+     * @throws Throwable
      */
     private function getInstance(ReflectionClass $item)
     {
@@ -214,13 +214,13 @@ class Container implements ContainerInterface
 
     /**
      * Get array of the resolved params
-     * 
-     * @param ReflectionMethod $method 
-     * @return array 
-     * @throws NotFoundException 
-     * @throws Throwable 
-     * @throws ReflectionException 
-     * @throws ContainerException 
+     *
+     * @param ReflectionMethod $method
+     * @return array
+     * @throws NotFoundException
+     * @throws Throwable
+     * @throws ReflectionException
+     * @throws ContainerException
      */
     private function getResolvedParameters(ReflectionMethod $method): array
     {
@@ -234,13 +234,13 @@ class Container implements ContainerInterface
 
     /**
      * Resolve constructor parameter
-     * 
-     * @param ReflectionParameter $parameter 
-     * @return mixed 
-     * @throws NotFoundException 
-     * @throws Throwable 
-     * @throws ReflectionException 
-     * @throws ContainerException 
+     *
+     * @param ReflectionParameter $parameter
+     * @return mixed
+     * @throws NotFoundException
+     * @throws Throwable
+     * @throws ReflectionException
+     * @throws ContainerException
      */
     private function resolveParameter(ReflectionParameter $parameter)
     {

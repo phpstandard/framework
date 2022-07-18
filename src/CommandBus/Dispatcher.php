@@ -10,8 +10,8 @@ use Psr\Container\ContainerExceptionInterface;
 class Dispatcher
 {
     /**
-     * @param Mapper $mapper 
-     * @return void 
+     * @param Mapper $mapper
+     * @return void
      */
     public function __construct(private Mapper $mapper)
     {
@@ -19,11 +19,11 @@ class Dispatcher
     }
 
     /**
-     * @param object $cmd 
-     * @return mixed 
-     * @throws NotFoundExceptionInterface 
-     * @throws ContainerExceptionInterface 
-     * @throws CommandNotDispatchedException 
+     * @param object $cmd
+     * @return mixed
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws CommandNotDispatchedException
      */
     public function dispatch(object $cmd): mixed
     {

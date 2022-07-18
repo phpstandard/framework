@@ -9,10 +9,10 @@ use Stringable;
 class View implements ViewInterface, Stringable
 {
     /**
-     * @param ViewEngineInterface $engine 
+     * @param ViewEngineInterface $engine
      * @param string $path Absolute path to the view file
-     * @param null|array $data 
-     * @return void 
+     * @param null|array $data
+     * @return void
      */
     public function __construct(
         private ViewEngineInterface $engine,

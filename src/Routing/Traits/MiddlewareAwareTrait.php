@@ -15,10 +15,10 @@ trait MiddlewareAwareTrait
 
     /**
      * Add middleware(s) to the stack
-     * 
+     *
      * @param MiddlewareInterface[]|MiddlewareInterface|string[]|string $middlewares
-     * @param bool $prepend 
-     * @return static 
+     * @param bool $prepend
+     * @return static
      */
     public function middleware(
         MiddlewareInterface|string|array $middlewares,

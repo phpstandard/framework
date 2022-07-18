@@ -14,9 +14,9 @@ class NotFoundException extends RuntimeException implements Stringable
     /**
      * @param ServerRequestInterface $request
      *  Server request which is not dispatched
-     * @param null|string $message 
-     * @param null|Throwable $previous 
-     * @return void 
+     * @param null|string $message
+     * @param null|Throwable $previous
+     * @return void
      */
     public function __construct(
         private ServerRequestInterface $request,

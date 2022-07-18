@@ -20,11 +20,11 @@ class Route implements RouteInterface
     private array $params = [];
 
     /**
-     * @param string $method 
-     * @param string $path 
-     * @param callable|string $handler 
-     * @param null|string $name 
-     * @return void 
+     * @param string $method
+     * @param string $path
+     * @param callable|string $handler
+     * @param null|string $name
+     * @return void
      */
     public function __construct(
         private string $method,
@@ -47,9 +47,9 @@ class Route implements RouteInterface
 
     /**
      * Set route method
-     * 
-     * @param string $method 
-     * @return Route 
+     *
+     * @param string $method
+     * @return Route
      */
     public function setMethod(string $method): Route
     {

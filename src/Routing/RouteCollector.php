@@ -20,12 +20,12 @@ class RouteCollector
 
     /**
      * Create a new route
-     * 
-     * @param string $method 
-     * @param string $path 
-     * @param callable|string $handle 
-     * @param null|string $name 
-     * @return Route 
+     *
+     * @param string $method
+     * @param string $path
+     * @param callable|string $handle
+     * @param null|string $name
+     * @return Route
      */
     public static function route(
         string $method,
@@ -39,10 +39,10 @@ class RouteCollector
     }
 
     /**
-     * @param null|string $prefix 
-     * @param null|RouteGroup $parentGroup 
-     * @param null|string $name 
-     * @return RouteGroup 
+     * @param null|string $prefix
+     * @param null|RouteGroup $parentGroup
+     * @param null|string $name
+     * @return RouteGroup
      */
     public static function group(
         ?string $prefix = null,
@@ -84,12 +84,12 @@ class RouteCollector
 
     /**
      * Create a new route
-     * 
-     * @param string $method 
-     * @param string $path 
-     * @param callable|string $handle 
-     * @param null|string $name 
-     * @return RouteCollector 
+     *
+     * @param string $method
+     * @param string $path
+     * @param callable|string $handle
+     * @param null|string $name
+     * @return RouteCollector
      */
     public function map(
         string $method,
@@ -118,8 +118,8 @@ class RouteCollector
     }
 
     /**
-     * @param string $name 
-     * @return RouteInterface|RouteGroup|null 
+     * @param string $name
+     * @return RouteInterface|RouteGroup|null
      */
     public function getByName(string $name): RouteInterface|RouteGroup|null
     {

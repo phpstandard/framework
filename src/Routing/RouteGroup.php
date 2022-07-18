@@ -8,9 +8,9 @@ namespace Framework\Routing;
 class RouteGroup extends RouteCollector
 {
     /**
-     * @param string $prefix 
-     * @param null|string $name 
-     * @return void 
+     * @param string $prefix
+     * @param null|string $name
+     * @return void
      */
     public function __construct(
         private string $prefix,
@@ -27,8 +27,8 @@ class RouteGroup extends RouteCollector
     }
 
     /**
-     * @param string $prefix 
-     * @return RouteGroup 
+     * @param string $prefix
+     * @return RouteGroup
      */
     public function setPrefix(string $prefix): RouteGroup
     {
@@ -43,8 +43,8 @@ class RouteGroup extends RouteCollector
     }
 
     /**
-     * @param null|string $name 
-     * @return RouteGroup 
+     * @param null|string $name
+     * @return RouteGroup
      */
     public function setName(?string $name): RouteGroup
     {

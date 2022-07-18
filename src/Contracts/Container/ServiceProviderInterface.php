@@ -9,7 +9,7 @@ interface ServiceProviderInterface
 {
     /**
      * Register services with the container
-     * 
+     *
      * @param ContainerInterface $container
      * @return void
      */

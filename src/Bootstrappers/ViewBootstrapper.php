@@ -11,9 +11,9 @@ use Framework\View\Engines\PhpViewEngine;
 class ViewBootstrapper implements BootstrapperInterface
 {
     /**
-     * @param ViewEngineFactoryInterface $factory 
-     * @param ViewFinderInterface $finder 
-     * @return void 
+     * @param ViewEngineFactoryInterface $factory
+     * @param ViewFinderInterface $finder
+     * @return void
      */
     public function __construct(
         private ViewEngineFactoryInterface $factory,

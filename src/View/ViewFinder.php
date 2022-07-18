@@ -31,7 +31,7 @@ class ViewFinder implements ViewFinderInterface
 
         if (file_exists($name) && is_file($name)) {
             $path = $name;
-        } else if ($this->isNamespaced($name)) {
+        } elseif ($this->isNamespaced($name)) {
             $path = $this->findNamespacedView($name);
         } else {
             $path = $this->findInPaths($name, $this->paths);
@@ -161,7 +161,7 @@ class ViewFinder implements ViewFinderInterface
     }
 
     /**
-     * Get the array of the possible file names by appending 
+     * Get the array of the possible file names by appending
      * the possible extensions to the name
      *
      * @param string $name

@@ -13,8 +13,8 @@ use Psr\Http\Server\MiddlewareInterface;
 class MiddlewareResolver implements MiddlewareResolverInterface
 {
     /**
-     * @param ContainerInterface $container 
-     * @return void 
+     * @param ContainerInterface $container
+     * @return void
      */
     public function __construct(
         private ContainerInterface $container
@@ -24,9 +24,9 @@ class MiddlewareResolver implements MiddlewareResolverInterface
 
     /**
      * @inheritDoc
-     * @throws NotFoundExceptionInterface 
-     * @throws ContainerExceptionInterface 
-     * @throws InvalidArgumentException 
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws InvalidArgumentException
      */
     public function resolve(
         MiddlewareInterface|string $middleware

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Dispatcher::match() and Dispatcher::compilePath() methods are heavily 
+ * Dispatcher::match() and Dispatcher::compilePath() methods are heavily
  * inspired by AltoRouter
- * 
+ *
  * @see https://altorouter.com
  */
 
@@ -26,16 +26,16 @@ class Dispatcher implements DispatcherInterface
         'a'  => '[0-9A-Za-z]++', // Alphanumeric
         'h'  => '[0-9A-Fa-f]++', // Hexadecimal
         's'  => '[0-9A-Za-z\-]++', // url slug
-        '*'  => '.+?', // 
+        '*'  => '.+?', //
         '**' => '.++',
         ''   => '[^/\.]++'
     ];
 
     /**
-     * @param RouteCollector $collector 
-     * @param MiddlewareResolverInterface $middlewareResolver 
-     * @param CallbackResolverInterface $callbackResolver 
-     * @return void 
+     * @param RouteCollector $collector
+     * @param MiddlewareResolverInterface $middlewareResolver
+     * @param CallbackResolverInterface $callbackResolver
+     * @return void
      */
     public function __construct(
         private RouteCollector $collector,
@@ -64,9 +64,9 @@ class Dispatcher implements DispatcherInterface
     }
 
     /**
-     * @param string $url 
-     * @param string $method 
-     * @return null|Route 
+     * @param string $url
+     * @param string $method
+     * @return null|Route
      */
     private function matchRoute(
         string $url,
@@ -104,7 +104,7 @@ class Dispatcher implements DispatcherInterface
                 $match = strcmp($url, $path) === 0;
             } else {
                 // Compare longest non-param string with url before moving on to
-                // regex. Check if last character before param is a slash, 
+                // regex. Check if last character before param is a slash,
                 // because it could be optional if param is optional too
                 if (
                     strncmp($url, $path, $position) !== 0
@@ -135,9 +135,9 @@ class Dispatcher implements DispatcherInterface
 
     /**
      * Compile the regex for a given route path (EXPENSIVE)
-     * 
-     * @param string $path 
-     * @return string 
+     *
+     * @param string $path
+     * @return string
      */
     protected function compilePath(string $path): string
     {
@@ -176,9 +176,9 @@ class Dispatcher implements DispatcherInterface
 
     /**
      * Resolve the middlewares
-     * 
-     * @param Route $route 
-     * @return Dispatcher 
+     *
+     * @param Route $route
+     * @return Dispatcher
      */
     private function resolveMiddlewares(Route $route): Dispatcher
     {
@@ -196,9 +196,9 @@ class Dispatcher implements DispatcherInterface
 
     /**
      * Resolve handle
-     * 
-     * @param Route $route 
-     * @return Dispatcher 
+     *
+     * @param Route $route
+     * @return Dispatcher
      */
     private function resolveHandler(Route $route): Dispatcher
     {

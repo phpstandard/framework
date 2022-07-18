@@ -2,7 +2,7 @@
 
 /**
  * This factory class internally uses Laminas Diactoros library.
- * 
+ *
  * @see https://github.com/laminas/laminas-diactoros
  */
 
@@ -39,13 +39,13 @@ class HttpFactory implements
     UriFactoryInterface
 {
     /**
-     * @param null|RequestFactoryInterface $requestFactory 
-     * @param null|ResponseFactoryInterface $responseFactory 
-     * @param null|ServerRequestFactoryInterface $serverRequestFactory 
-     * @param null|StreamFactoryInterface $streamFactory 
-     * @param null|UploadedFileFactoryInterface $uploadedFileFactory 
-     * @param null|UriFactoryInterface $uriFactory 
-     * @return void 
+     * @param null|RequestFactoryInterface $requestFactory
+     * @param null|ResponseFactoryInterface $responseFactory
+     * @param null|ServerRequestFactoryInterface $serverRequestFactory
+     * @param null|StreamFactoryInterface $streamFactory
+     * @param null|UploadedFileFactoryInterface $uploadedFileFactory
+     * @param null|UriFactoryInterface $uriFactory
+     * @return void
      */
     public function __construct(
         private ?RequestFactoryInterface $requestFactory = null,
@@ -63,7 +63,7 @@ class HttpFactory implements
     public function createRequest(string $method, $uri): RequestInterface
     {
         if (!$this->requestFactory) {
-            $this->requestFactory = new RequestFactory;
+            $this->requestFactory = new RequestFactory();
         }
 
         return $this->requestFactory->createRequest($method, $uri);
@@ -77,7 +77,7 @@ class HttpFactory implements
         string $reasonPhrase = ''
     ): ResponseInterface {
         if (!$this->responseFactory) {
-            $this->responseFactory = new ResponseFactory;
+            $this->responseFactory = new ResponseFactory();
         }
 
         return $this->responseFactory->createResponse($code, $reasonPhrase);
@@ -92,7 +92,7 @@ class HttpFactory implements
         array $serverParams = []
     ): ServerRequestInterface {
         if (!$this->serverRequestFactory) {
-            $this->serverRequestFactory = new ServerRequestFactory;
+            $this->serverRequestFactory = new ServerRequestFactory();
         }
 
         return $this->serverRequestFactory
@@ -105,7 +105,7 @@ class HttpFactory implements
     public function createStream(string $content = ''): StreamInterface
     {
         if (!$this->streamFactory) {
-            $this->streamFactory = new StreamFactory;
+            $this->streamFactory = new StreamFactory();
         }
 
         return $this->streamFactory->createStream($content);
@@ -119,7 +119,7 @@ class HttpFactory implements
         string $mode = 'r'
     ): StreamInterface {
         if (!$this->streamFactory) {
-            $this->streamFactory = new StreamFactory;
+            $this->streamFactory = new StreamFactory();
         }
 
         return $this->streamFactory->createStreamFromFile($filename, $mode);
@@ -131,7 +131,7 @@ class HttpFactory implements
     public function createStreamFromResource($resource): StreamInterface
     {
         if (!$this->streamFactory) {
-            $this->streamFactory = new StreamFactory;
+            $this->streamFactory = new StreamFactory();
         }
 
         return $this->streamFactory->createStreamFromResource($resource);
@@ -148,7 +148,7 @@ class HttpFactory implements
         ?string $clientMediaType = null
     ): UploadedFileInterface {
         if (!$this->uploadedFileFactory) {
-            $this->uploadedFileFactory = new UploadedFileFactory;
+            $this->uploadedFileFactory = new UploadedFileFactory();
         }
 
         return $this->uploadedFileFactory->createUploadedFile(
@@ -166,7 +166,7 @@ class HttpFactory implements
     public function createUri(string $uri = ''): UriInterface
     {
         if (!$this->uriFactory) {
-            $this->uriFactory = new UriFactory;
+            $this->uriFactory = new UriFactory();
         }
 
         return $this->uriFactory->createUri($uri);

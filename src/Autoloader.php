@@ -2,9 +2,9 @@
 
 namespace Framework;
 
-/** 
+/**
  * PSR-4 Autoloader Class
- * @package Framework 
+ * @package Framework
  */
 class Autoloader
 {
@@ -121,7 +121,6 @@ class Autoloader
 
         // look through base directories for this namespace prefix
         foreach ($this->prefixes[$prefix] as $base_dir) {
-
             // replace the namespace prefix with the base directory,
             // replace namespace separators with directory separators
             // in the relative class name, append with .php

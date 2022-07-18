@@ -11,11 +11,11 @@ class HeadersAlreadySentException extends EmitterException
 {
     /**
      * @param string $file PHP source file name where output started in
-     * @param null|string $line Line number in the PHP source file name where 
+     * @param null|string $line Line number in the PHP source file name where
      * output started in
-     * @param int $code 
-     * @param null|Throwable $previous 
-     * @return void 
+     * @param int $code
+     * @param null|Throwable $previous
+     * @return void
      */
     public function __construct(
         private string $file,

@@ -13,7 +13,7 @@ interface ContainerInterface extends PsrContainerInterface
      * @param string $abstract
      * @param mixed $concrete
      * @param bool $shared
-     * @return ContainerInterface 
+     * @return ContainerInterface
      */
     public function set(
         string $abstract,
@@ -23,10 +23,10 @@ interface ContainerInterface extends PsrContainerInterface
 
     /**
      * Call a method on the instance
-     * 
+     *
      * @param string|object $instance Class name or instance of the class
-     * @param string $methodName 
-     * @return mixed 
+     * @param string $methodName
+     * @return mixed
      */
     public function callMehtod(
         string|object $instance,

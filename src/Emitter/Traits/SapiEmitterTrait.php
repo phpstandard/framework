@@ -17,9 +17,9 @@ use function strtolower;
 trait SapiEmitterTrait
 {
     /**
-     * Assert either that no headers been sent or the output buffer contains no 
+     * Assert either that no headers been sent or the output buffer contains no
      * content.
-     * 
+     *
      * @return void
      */
     private function assertNoPreviousOutput(): void
@@ -32,7 +32,7 @@ trait SapiEmitterTrait
         }
 
         if (ob_get_level() > 0 && ob_get_length() > 0) {
-            throw new PreviousOutputException;
+            throw new PreviousOutputException();
         }
     }
 
@@ -41,9 +41,9 @@ trait SapiEmitterTrait
      *
      * Emits the status line using the protocol version and status code from
      * the response; if a reason phrase is available, it, too, is emitted.
-     * 
-     * @param ResponseInterface $response 
-     * @return void 
+     *
+     * @param ResponseInterface $response
+     * @return void
      */
     private function emitStatusLine(ResponseInterface $response): void
     {
@@ -68,9 +68,9 @@ trait SapiEmitterTrait
      * is an array with multiple values, ensures that each is sent
      * in such a way as to create aggregate headers (instead of replace
      * the previous).
-     * 
-     * @param ResponseInterface $response 
-     * @return void 
+     *
+     * @param ResponseInterface $response
+     * @return void
      */
     private function emitHeaders(ResponseInterface $response): void
     {
@@ -79,7 +79,7 @@ trait SapiEmitterTrait
         foreach ($response->getHeaders() as $name => $values) {
             $name  = $this->normalizeHeaderName($name);
 
-            // Replace previous headers of the same type which 
+            // Replace previous headers of the same type which
             // set out of this method. Never replace cookie headers.
             $replace = $name !== 'Set-Cookie';
             foreach ($values as $value) {
@@ -93,11 +93,11 @@ trait SapiEmitterTrait
 
     /**
      * Normalize the a header name
-     * 
+     *
      * Normalized header will be in the following format: Example-Header-Name
-     * 
-     * @param string $headerName 
-     * @return string 
+     *
+     * @param string $headerName
+     * @return string
      */
     private function normalizeHeaderName(string $headerName): string
     {

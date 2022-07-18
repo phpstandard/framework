@@ -10,6 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use function connection_status;
 use function substr;
 use function preg_match;
+
 use const CONNECTION_NORMAL;
 
 /** @package Framework\Emitter */
@@ -18,9 +19,9 @@ class SapiStreamEmitter implements EmitterInterface
     use SapiEmitterTrait;
 
     /**
-     * @param int $maxBufferSize 
-     * @return void 
-     * @throws EmitterException 
+     * @param int $maxBufferSize
+     * @return void
+     * @throws EmitterException
      */
     public function __construct(private int $maxBufferSize = 8192)
     {
@@ -29,7 +30,7 @@ class SapiStreamEmitter implements EmitterInterface
 
     /**
      * Get the value of max buffer size
-     * 
+     *
      * @return integer
      */
     public function getMaxBufferSize(): int
@@ -39,10 +40,10 @@ class SapiStreamEmitter implements EmitterInterface
 
     /**
      * Set the value of max buffer size
-     * 
-     * @param int $maxBufferSize 
-     * @return SapiStreamEmitter 
-     * @throws EmitterException 
+     *
+     * @param int $maxBufferSize
+     * @return SapiStreamEmitter
+     * @throws EmitterException
      */
     public function setMaxBufferSize(int $maxBufferSize): SapiStreamEmitter
     {
@@ -160,11 +161,11 @@ class SapiStreamEmitter implements EmitterInterface
     }
 
     /**
-     * Get ContentRange 
-     * 
-     * Parses the Content-Range header line from the response and generates 
+     * Get ContentRange
+     *
+     * Parses the Content-Range header line from the response and generates
      * ContentRange instance.
-     * 
+     *
      * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.16
      *
      * @param ResponseInterface $response

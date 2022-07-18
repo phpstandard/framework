@@ -14,11 +14,11 @@ use Psr\Container\ContainerExceptionInterface;
 class Application implements ApplicationInterface
 {
     /**
-     * @param ContainerInterface $container 
-     * @param (ServiceProviderInterface|string)[]|null $providers 
-     * @param (BootstrapperInterface|string)[]|null $bootstrappers 
+     * @param ContainerInterface $container
+     * @param (ServiceProviderInterface|string)[]|null $providers
+     * @param (BootstrapperInterface|string)[]|null $bootstrappers
      * @param null|string $basePath Base (root) path of the app
-     * @return void 
+     * @return void
      */
     public function __construct(
         private ContainerInterface $container,
@@ -102,11 +102,11 @@ class Application implements ApplicationInterface
 
     /**
      * Invoke service providers
-     * 
-     * @return void 
-     * @throws NotFoundExceptionInterface 
-     * @throws ContainerExceptionInterface 
-     * @throws Exception 
+     *
+     * @return void
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws Exception
      */
     private function invokeServiceProviders()
     {
@@ -133,11 +133,11 @@ class Application implements ApplicationInterface
 
     /**
      * Invoke bootstrappers
-     * 
-     * @return void 
-     * @throws NotFoundExceptionInterface 
-     * @throws ContainerExceptionInterface 
-     * @throws Exception 
+     *
+     * @return void
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws Exception
      */
     private function invokeBootstrappers()
     {

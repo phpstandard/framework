@@ -12,10 +12,10 @@ use Throwable;
 class NotFoundException extends Exception implements NotFoundExceptionInterface
 {
     /**
-     * @param string $id 
-     * @param int $code 
-     * @param null|Throwable $previous 
-     * @return void 
+     * @param string $id
+     * @param int $code
+     * @param null|Throwable $previous
+     * @return void
      */
     public function __construct(
         string $id,

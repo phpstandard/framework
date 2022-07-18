@@ -20,7 +20,7 @@ class HttpFactoryServiceProvider implements ServiceProviderInterface
      */
     public function register(ContainerInterface $container): void
     {
-        $factory = new HttpFactory;
+        $factory = new HttpFactory();
 
         $container->set(RequestFactoryInterface::class, $factory)
             ->set(ResponseFactoryInterface::class, $factory)

@@ -14,8 +14,8 @@ use Psr\Container\NotFoundExceptionInterface;
 class CallbackResolver implements CallbackResolverInterface
 {
     /**
-     * @param ContainerInterface $container 
-     * @return void 
+     * @param ContainerInterface $container
+     * @return void
      */
     public function __construct(
         private ContainerInterface $container
@@ -63,11 +63,11 @@ class CallbackResolver implements CallbackResolverInterface
 
     /**
      * Get an object instance from a class name
-     * 
-     * @param string $class 
-     * @return mixed 
-     * @throws NotFoundExceptionInterface 
-     * @throws ContainerExceptionInterface 
+     *
+     * @param string $class
+     * @return mixed
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
      */
     private function resolveClass(string $class): mixed
     {

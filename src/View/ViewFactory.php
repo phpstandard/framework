@@ -15,9 +15,9 @@ class ViewFactory implements ViewFactoryInterface
     private array $shared = [];
 
     /**
-     * @param ViewFinderInterface $finder 
-     * @param ViewEngineFactoryInterface $engineFactory 
-     * @return void 
+     * @param ViewFinderInterface $finder
+     * @param ViewEngineFactoryInterface $engineFactory
+     * @return void
      */
     public function __construct(
         private ViewFinderInterface $finder,
@@ -27,7 +27,7 @@ class ViewFactory implements ViewFactoryInterface
 
     /**
      * @inheritDoc
-     * @throws InvalidArgumentException 
+     * @throws InvalidArgumentException
      */
     public function create(
         string|array $names,
@@ -63,10 +63,10 @@ class ViewFactory implements ViewFactoryInterface
     }
 
     /**
-     * @param string $name 
-     * @param null|array $data 
-     * @return ViewInterface 
-     * @throws InvalidArgumentException 
+     * @param string $name
+     * @param null|array $data
+     * @return ViewInterface
+     * @throws InvalidArgumentException
      */
     private function createView(
         string $name,
@@ -83,8 +83,8 @@ class ViewFactory implements ViewFactoryInterface
     }
 
     /**
-     * @param string $name 
-     * @return bool 
+     * @param string $name
+     * @return bool
      */
     private function exists(string $name): bool
     {

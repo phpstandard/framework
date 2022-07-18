@@ -8,15 +8,15 @@ use Framework\Emitter\Exceptions\EmitterException;
 class ContentRange
 {
     /**
-     * @param int $start An integer in the given unit indicating the beginning 
+     * @param int $start An integer in the given unit indicating the beginning
      * of the request range.
-     * @param int $end An integer in the given unit indicating the end of the 
+     * @param int $end An integer in the given unit indicating the end of the
      * requested range.
      * @param null|int $size The total size of the document.
-     * @param string $unit The unit in which ranges are specified. This is 
+     * @param string $unit The unit in which ranges are specified. This is
      * usually `bytes`.
-     * @return void 
-     * @throws EmitterException 
+     * @return void
+     * @throws EmitterException
      */
     public function __construct(
         private int $start,
@@ -40,10 +40,10 @@ class ContentRange
 
     /**
      * Set the unit in which ranges are specified. This is usually bytes.
-     * 
-     * @param string $unit The unit in which ranges are specified. This is 
+     *
+     * @param string $unit The unit in which ranges are specified. This is
      * usually bytes.
-     * @return ContentRange 
+     * @return ContentRange
      */
     public function setUnit(string $unit): ContentRange
     {
@@ -53,7 +53,7 @@ class ContentRange
 
     /**
      * Get the beginning of the request range.
-     * 
+     *
      * @return  int
      */
     public function getStart(): int
@@ -63,10 +63,10 @@ class ContentRange
 
     /**
      * Set the beginning of the request range.
-     * 
+     *
      * @param int $start the beginning of the request range.
-     * @return ContentRange 
-     * @throws EmitterException 
+     * @return ContentRange
+     * @throws EmitterException
      */
     public function setStart(int $start): ContentRange
     {
@@ -80,9 +80,9 @@ class ContentRange
     }
 
     /**
-     * Get an integer in the given unit indicating 
+     * Get an integer in the given unit indicating
      * the end of the requested range.
-     * 
+     *
      * @return  int
      */
     public function getEnd(): int
@@ -91,10 +91,10 @@ class ContentRange
     }
 
     /**
-     * Set an integer in the given unit indicating 
+     * Set an integer in the given unit indicating
      * the end of the requested range.
-     * 
-     * @param  int  $end  An integer in the given unit indicating the 
+     *
+     * @param  int  $end  An integer in the given unit indicating the
      * end of the requested range.
      * @return  ContentRange
      */
@@ -112,7 +112,7 @@ class ContentRange
 
     /**
      * Get the total size of the document.
-     * 
+     *
      * @return  int|null
      */
     public function getSize(): ?int
@@ -122,7 +122,7 @@ class ContentRange
 
     /**
      * Set the total size of the document.
-     * 
+     *
      * @param  int|null $size The total size of the document.
      * @return  self
      */

@@ -31,9 +31,9 @@ class ListenerProvider implements ListenerProviderInterface
     private array $wrappers = [];
 
     /**
-     * @param ContainerInterface $container 
-     * @param null|CallbackResolverInterface $resolver 
-     * @return void 
+     * @param ContainerInterface $container
+     * @param null|CallbackResolverInterface $resolver
+     * @return void
      */
     public function __construct(
         private ContainerInterface $container,
@@ -51,10 +51,10 @@ class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * @param string $eventType 
-     * @param string|callable $listener 
-     * @param int $priority 
-     * @return ListenerProvider 
+     * @param string $eventType
+     * @param string|callable $listener
+     * @param int $priority
+     * @return ListenerProvider
      */
     public function addEventListener(
         string $eventType,
@@ -86,10 +86,10 @@ class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * Resolve the listeners for event type and 
+     * Resolve the listeners for event type and
      * return resolved listeners iterable
      *
-     * @param object $event 
+     * @param object $event
      * @return iterable<callable>
      */
     private function getResolvedListeners(object $event): iterable
@@ -131,7 +131,7 @@ class ListenerProvider implements ListenerProviderInterface
 
     /**
      * Sort listener wrappers by descending order priority
-     * 
+     *
      * @param ListenerWrapper[] $wrappers
      * @return void
      */

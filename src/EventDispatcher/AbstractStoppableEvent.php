@@ -10,7 +10,7 @@ use Psr\EventDispatcher\StoppableEventInterface;
 abstract class AbstractStoppableEvent implements StoppableEventInterface
 {
     /**
-     * Propagation identicator of the event. 
+     * Propagation identicator of the event.
      * True means propagation must be stoppped.
      *
      * @var boolean

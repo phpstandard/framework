@@ -10,9 +10,9 @@ use Psr\Http\Message\ResponseInterface;
 interface EmitterInterface
 {
     /**
-     * 
+     *
      * Emit a response.
-     * 
+     *
      * Emits a response, including status line, headers, and the message body,
      * according to the environment.
      *
