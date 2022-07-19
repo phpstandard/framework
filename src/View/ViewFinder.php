@@ -107,7 +107,8 @@ class ViewFinder implements ViewFinderInterface
      * Parse view name into namespace and the actual view name
      *
      * @param string $name
-     * @return array<string,string>
+     * @return string[]
+     * @throws InvalidArgumentException
      */
     private function parseNamespaceSegments(string $name): array
     {
@@ -134,6 +135,7 @@ class ViewFinder implements ViewFinderInterface
      * @param string $name
      * @param array $paths
      * @return string
+     * @throws InvalidArgumentException
      */
     private function findInPaths(
         string $name,

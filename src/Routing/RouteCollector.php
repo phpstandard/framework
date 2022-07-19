@@ -15,8 +15,8 @@ class RouteCollector
     /** @var (Route|RouteGroup)[] $collection */
     protected array $collection = [];
 
-    /** @var Route[] $route */
-    private array $routes;
+    /** @var null|Route[] $routes */
+    private ?array $routes = null;
 
     /**
      * Create a new route

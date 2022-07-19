@@ -10,20 +10,20 @@ use function sprintf;
 class HeadersAlreadySentException extends EmitterException
 {
     /**
-     * @param string $file PHP source file name where output started in
-     * @param null|string $line Line number in the PHP source file name where
+     * @param string $headersSentFile PHP source file name where output started in
+     * @param null|string $headersSentLine Line number in the PHP source file name where
      * output started in
      * @param int $code
      * @param null|Throwable $previous
      * @return void
      */
     public function __construct(
-        private string $file,
-        private ?string $line,
+        private string $headersSentFile,
+        private ?string $headersSentLine,
         int $code = 0,
         ?Throwable $previous = null
     ) {
-        $msg = sprintf('Headers already sent in file %s on line %s.', $file, $line);
+        $msg = sprintf('Headers already sent in file %s on line %s.', $headersSentFile, $headersSentLine);
         parent::__construct($msg, $code, $previous);
     }
 
@@ -34,7 +34,7 @@ class HeadersAlreadySentException extends EmitterException
      */
     public function getHeadersSentFile(): string
     {
-        return $this->file;
+        return $this->headersSentFile;
     }
 
     /**
@@ -44,6 +44,6 @@ class HeadersAlreadySentException extends EmitterException
      */
     public function getHeadersSentLine(): string
     {
-        return $this->line;
+        return $this->headersSentLine;
     }
 }

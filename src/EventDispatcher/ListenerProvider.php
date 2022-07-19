@@ -132,10 +132,10 @@ class ListenerProvider implements ListenerProviderInterface
     /**
      * Sort listener wrappers by descending order priority
      *
-     * @param ListenerWrapper[] $wrappers
-     * @return void
+     * @param ListenerWrapper $wrappers
+     * @return ListenerWrapper[]
      */
-    private function sortWrappers(ListenerWrapper ...$wrappers): void
+    private function sortWrappers(ListenerWrapper ...$wrappers): array
     {
         usort(
             $wrappers,
@@ -143,5 +143,7 @@ class ListenerProvider implements ListenerProviderInterface
                 return $b->getPriority() <=> $a->getPriority();
             }
         );
+
+        return $wrappers;
     }
 }

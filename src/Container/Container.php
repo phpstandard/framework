@@ -111,12 +111,11 @@ class Container implements ContainerInterface
 
         try {
             $this->getReflector($id);
-            return true;
-        } catch (Throwable $th) {
+        } catch (Throwable) {
             return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -131,8 +130,8 @@ class Container implements ContainerInterface
      */
     private function resolve(string $id)
     {
-        $is_shared = isset($this->shared[$id]);
-        if ($is_shared && isset($this->resolved[$id])) {
+        $isShared = isset($this->shared[$id]);
+        if ($isShared && isset($this->resolved[$id])) {
             return $this->resolved[$id];
         }
 
@@ -144,6 +143,7 @@ class Container implements ContainerInterface
                 return $entry;
             }
 
+            /** @phpstan-ignore-next-line */
             if ($entry instanceof Closure) {
                 return $entry($this);
             }
@@ -165,7 +165,7 @@ class Container implements ContainerInterface
 
         $instance = $this->getInstance($reflector);
 
-        if ($is_shared) {
+        if ($isShared) {
             $this->resolved[$id] = $instance;
         }
 
@@ -187,13 +187,13 @@ class Container implements ContainerInterface
      * Get an instance for the entry
      *
      * @param ReflectionClass $item
-     * @return object|null
+     * @return object
      * @throws ContainerException
      * @throws ReflectionException
      * @throws NotFoundException
      * @throws Throwable
      */
-    private function getInstance(ReflectionClass $item)
+    private function getInstance(ReflectionClass $item): object
     {
         if (!$item->isInstantiable()) {
             throw new ContainerException("{$item->name} is not instantiable");

@@ -116,7 +116,7 @@ class Autoloader
     ): ?string {
         // are there any base directories for this namespace prefix?
         if (isset($this->prefixes[$prefix]) === false) {
-            return false;
+            return null;
         }
 
         // look through base directories for this namespace prefix

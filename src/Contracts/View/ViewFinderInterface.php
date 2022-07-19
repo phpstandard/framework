@@ -7,7 +7,7 @@ use InvalidArgumentException;
 /** @package Framework\Contracts\View */
 interface ViewFinderInterface
 {
-    const NAMESPACE_DELIMITER = '::';
+    public const NAMESPACE_DELIMITER = '::';
 
     /**
      * Find the fully qualified location of the view
