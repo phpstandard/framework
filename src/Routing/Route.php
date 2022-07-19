@@ -13,10 +13,17 @@ class Route implements RouteInterface
     use MiddlewareAwareTrait;
 
     /**
-     * Route parameters
+     * Property type declarations support all type declarations supported by
+     * PHP, with the exception of void and callable.
      *
-     * @var array
+     * @see https://wiki.php.net/rfc/typed_properties_v2
+     * @see https://wiki.php.net/rfc/consistent_callables
      */
+
+    /** @var callable|string $handler */
+    private $handler;
+
+    /** @var array $params Route parameters */
     private array $params = [];
 
     /**
@@ -29,10 +36,11 @@ class Route implements RouteInterface
     public function __construct(
         private string $method,
         private string $path,
-        private callable|string $handler,
+        callable|string $handler,
         private ?string $name = null
     ) {
         $this->setPath($path);
+        $this->handler = $handler;
     }
 
     /**

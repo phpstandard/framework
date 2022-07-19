@@ -8,16 +8,28 @@ namespace Framework\EventDispatcher;
 class ListenerWrapper
 {
     /**
+     * Property type declarations support all type declarations supported by
+     * PHP, with the exception of void and callable.
+     *
+     * @see https://wiki.php.net/rfc/typed_properties_v2
+     * @see https://wiki.php.net/rfc/consistent_callables
+     */
+
+    /** @var string|callable $listener */
+    private $listener;
+
+    /**
      * @param string|callable $listener Listener callback
      * @param int $priority Listener priority
      * @param bool $isResolved Whether listener's callback is resolved or not
      * @return void
      */
     public function __construct(
-        private string|callable $listener,
+        string|callable $listener,
         private int $priority,
         private bool $isResolved = false
     ) {
+        $this->listener = $listener;
     }
 
     /**
