@@ -6,29 +6,24 @@ use Throwable;
 
 use function sprintf;
 
+/** @package Framework\Emitter\Exceptions */
 class HeadersAlreadySentException extends EmitterException
 {
     /**
-     * PHP source file name where output started in.
-     *
-     * @var string
+     * @param string $headersSentFile PHP source file name where output started in
+     * @param null|string $headersSentLine Line number in the PHP source file name where
+     * output started in
+     * @param int $code
+     * @param null|Throwable $previous
+     * @return void
      */
-    private $file;
-
-    /**
-     * Line number in the PHP source file name where output started in
-     *
-     * @var string
-     */
-    private $line;
-
     public function __construct(
-        string $file,
-        ?string $line,
+        private string $headersSentFile,
+        private ?string $headersSentLine,
         int $code = 0,
         ?Throwable $previous = null
     ) {
-        $msg = sprintf('Headers already sent in file %s on line %s.', $file, $line);
+        $msg = sprintf('Headers already sent in file %s on line %s.', $headersSentFile, $headersSentLine);
         parent::__construct($msg, $code, $previous);
     }
 
@@ -37,9 +32,9 @@ class HeadersAlreadySentException extends EmitterException
      *
      * @return  string
      */
-    public function getHeadersSentFile()
+    public function getHeadersSentFile(): string
     {
-        return $this->file;
+        return $this->headersSentFile;
     }
 
     /**
@@ -47,8 +42,8 @@ class HeadersAlreadySentException extends EmitterException
      *
      * @return  string
      */
-    public function getHeadersSentLine()
+    public function getHeadersSentLine(): string
     {
-        return $this->line;
+        return $this->headersSentLine;
     }
 }

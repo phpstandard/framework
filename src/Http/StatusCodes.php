@@ -6,9 +6,10 @@ namespace Framework\Http;
 
 /**
  * Http Status Codes
- * 
+ *
  * @see https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+ * @package Framework\Http
  */
 class StatusCodes
 {

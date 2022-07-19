@@ -2,6 +2,7 @@
 
 namespace Framework\Contracts\Core;
 
+/** @package Framework\Contracts\Core */
 interface BootstrapperInterface
 {
     /**
@@ -10,5 +11,5 @@ interface BootstrapperInterface
      *
      * @return void
      */
-    public function bootstrap();
+    public function bootstrap(): void;
 }

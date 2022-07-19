@@ -12,24 +12,28 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+/** @package Framework\Http */
 class RequestHandler implements RequestHandlerInterface
 {
-    /** @var DispatcherInterface|null $route */
-    private $dispatcher;
-
     /** @var MiddlewareInterface[] $middlewareStack */
-    private $middlewareStack = [];
+    private array $middlewareStack = [];
+    private ?RouteInterface $route = null;
 
-    /** @var RouteInterface $route */
-    private $route;
-
-    public function __construct(DispatcherInterface $dispatcher)
-    {
-        $this->dispatcher = $dispatcher;
+    /**
+     * @param DispatcherInterface $dispatcher
+     * @return void
+     */
+    public function __construct(
+        private DispatcherInterface $dispatcher
+    ) {
     }
 
     /**
      * @inheritDoc
+     *
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws NotFoundException
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
@@ -44,8 +48,8 @@ class RequestHandler implements RequestHandlerInterface
             $this->middlewareStack = $this->route->getMiddlewareStack();
         }
 
-        /** @var MiddlewareInterface $middleware */
         $middleware = array_shift($this->middlewareStack);
+
         if ($middleware) {
             $response = $middleware->process($request, $this);
         } else {

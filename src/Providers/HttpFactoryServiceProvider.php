@@ -12,14 +12,15 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 
+/** @package Framework\Providers */
 class HttpFactoryServiceProvider implements ServiceProviderInterface
 {
     /**
      * @inheritDoc
      */
-    public function register(ContainerInterface $container)
+    public function register(ContainerInterface $container): void
     {
-        $factory = new HttpFactory;
+        $factory = new HttpFactory();
 
         $container->set(RequestFactoryInterface::class, $factory)
             ->set(ResponseFactoryInterface::class, $factory)

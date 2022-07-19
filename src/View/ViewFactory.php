@@ -8,38 +8,31 @@ use Framework\Contracts\View\ViewFinderInterface;
 use Framework\Contracts\View\ViewInterface;
 use InvalidArgumentException;
 
+/** @package Framework\View */
 class ViewFactory implements ViewFactoryInterface
 {
-    /** @var ViewFinderInterface $finder */
-    private $finder;
-
-    /** @var ViewEngineFactoryInterface $engineFactory */
-    private $engineFactory;
-
     /** @var array Associative array of the shared data */
-    private $shared = [];
+    private array $shared = [];
 
+    /**
+     * @param ViewFinderInterface $finder
+     * @param ViewEngineFactoryInterface $engineFactory
+     * @return void
+     */
     public function __construct(
-        ViewFinderInterface $finder,
-        ViewEngineFactoryInterface $engineFactory
+        private ViewFinderInterface $finder,
+        private ViewEngineFactoryInterface $engineFactory
     ) {
-        $this->finder = $finder;
-        $this->engineFactory = $engineFactory;
     }
 
     /**
      * @inheritDoc
+     * @throws InvalidArgumentException
      */
-    public function create($names, ?array $data = null): ViewInterface
-    {
-        if (!is_array($names) && !is_string($names)) {
-            throw new InvalidArgumentException(
-                'Argument 1 passed to ' . __METHOD__
-                    . ' must either string or array type. '
-                    . gettype($names) . ' is given.'
-            );
-        }
-
+    public function create(
+        string|array $names,
+        ?array $data = null
+    ): ViewInterface {
         if (is_string($names)) {
             return $this->createView($names, $data);
         }
@@ -64,13 +57,21 @@ class ViewFactory implements ViewFactoryInterface
     /**
      * @inheritDoc
      */
-    public function share(string $key, $value = null)
+    public function share(string $key, mixed $value = null): void
     {
         $this->shared[$key] = $value;
     }
 
-    private function createView(string $name, ?array $data = null): ViewInterface
-    {
+    /**
+     * @param string $name
+     * @param null|array $data
+     * @return ViewInterface
+     * @throws InvalidArgumentException
+     */
+    private function createView(
+        string $name,
+        ?array $data = null
+    ): ViewInterface {
         $path = $this->finder->find($name);
         $engine = $this->engineFactory->getEngine($path);
 
@@ -82,16 +83,14 @@ class ViewFactory implements ViewFactoryInterface
     }
 
     /**
-     * Undocumented function
-     *
      * @param string $name
-     * @return boolean
+     * @return bool
      */
     private function exists(string $name): bool
     {
         try {
-            $path = $this->finder->find($name);
-        } catch (InvalidArgumentException $th) {
+            $this->finder->find($name);
+        } catch (InvalidArgumentException) {
             return false;
         }
 

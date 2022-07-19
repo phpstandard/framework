@@ -4,6 +4,7 @@ namespace Framework\Contracts\Support;
 
 use Psr\Http\Server\MiddlewareInterface;
 
+/** @package Framework\Contracts\Support */
 interface MiddlewareResolverInterface
 {
     /**
@@ -13,5 +14,7 @@ interface MiddlewareResolverInterface
      *
      * @return MiddlewareInterface
      */
-    public function resolve($middleware): MiddlewareInterface;
+    public function resolve(
+        MiddlewareInterface|string $middleware
+    ): MiddlewareInterface;
 }

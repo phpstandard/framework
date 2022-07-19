@@ -2,13 +2,14 @@
 
 namespace Framework\Contracts\Support;
 
+/** @package Framework\Contracts\Support */
 interface CallbackResolverInterface
 {
     /**
      * Resolves a callback string or array to the callable
      *
-     * @param string|callable $handler
+     * @param string|callable $callback
      * @return callable
      */
-    public function resolve($callback): callable;
+    public function resolve(string|callable $callback): callable;
 }

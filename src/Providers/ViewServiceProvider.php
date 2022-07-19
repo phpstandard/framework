@@ -11,12 +11,13 @@ use Framework\View\ViewEngineFactory;
 use Framework\View\ViewFactory;
 use Framework\View\ViewFinder;
 
+/** @package Framework\Providers */
 class ViewServiceProvider implements ServiceProviderInterface
 {
     /**
      * @inheritDoc
      */
-    public function register(ContainerInterface $container)
+    public function register(ContainerInterface $container): void
     {
         $container
             ->set(ViewFactoryInterface::class, ViewFactory::class, true)

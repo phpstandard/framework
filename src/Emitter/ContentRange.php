@@ -4,47 +4,28 @@ namespace Framework\Emitter;
 
 use Framework\Emitter\Exceptions\EmitterException;
 
+/** @package Framework\Emitter */
 class ContentRange
 {
     /**
-     * An integer in the given unit indicating 
-     * the beginning of the request range.
-     *
-     * @var int
+     * @param int $start An integer in the given unit indicating the beginning
+     * of the request range.
+     * @param int $end An integer in the given unit indicating the end of the
+     * requested range.
+     * @param null|int $size The total size of the document.
+     * @param string $unit The unit in which ranges are specified. This is
+     * usually `bytes`.
+     * @return void
+     * @throws EmitterException
      */
-    private $start;
-
-    /**
-     * An integer in the given unit indicating the end of the requested range.
-     *
-     * @var int
-     */
-    private $end;
-
-    /**
-     * The total size of the document (or '*' if unknown).
-     *
-     * @var int|null
-     */
-    private $size;
-
-    /**
-     * The unit in which ranges are specified. This is usually `bytes`.
-     *
-     * @var string
-     */
-    private $unit;
-
     public function __construct(
-        int $start,
-        int $end,
-        ?int $size = null,
-        string $unit = 'bytes'
+        private int $start,
+        private int $end,
+        private ?int $size = null,
+        private string $unit = 'bytes'
     ) {
         $this->setStart($start)
-            ->setEnd($end)
-            ->setSize($size)
-            ->setUnit($unit);
+            ->setEnd($end);
     }
 
     /**
@@ -60,14 +41,13 @@ class ContentRange
     /**
      * Set the unit in which ranges are specified. This is usually bytes.
      *
-     * @param  string  $unit  The unit in which ranges are specified. This is usually bytes.
-     *
-     * @return  self
+     * @param string $unit The unit in which ranges are specified. This is
+     * usually bytes.
+     * @return ContentRange
      */
-    public function setUnit(string $unit): self
+    public function setUnit(string $unit): ContentRange
     {
         $this->unit = $unit;
-
         return $this;
     }
 
@@ -84,11 +64,11 @@ class ContentRange
     /**
      * Set the beginning of the request range.
      *
-     * @param  int  $start  the beginning of the request range.
-     *
-     * @return  self
+     * @param int $start the beginning of the request range.
+     * @return ContentRange
+     * @throws EmitterException
      */
-    public function setStart(int $start): self
+    public function setStart(int $start): ContentRange
     {
         if ($start < 0) {
             throw new EmitterException("Range start value must be positive integer");
@@ -100,7 +80,8 @@ class ContentRange
     }
 
     /**
-     * Get an integer in the given unit indicating the end of the requested range.
+     * Get an integer in the given unit indicating
+     * the end of the requested range.
      *
      * @return  int
      */
@@ -110,25 +91,27 @@ class ContentRange
     }
 
     /**
-     * Set an integer in the given unit indicating the end of the requested range.
+     * Set an integer in the given unit indicating
+     * the end of the requested range.
      *
-     * @param  int  $end  An integer in the given unit indicating the end of the requested range.
-     *
-     * @return  self
+     * @param  int  $end  An integer in the given unit indicating the
+     * end of the requested range.
+     * @return  ContentRange
      */
-    public function setEnd(int $end): self
+    public function setEnd(int $end): ContentRange
     {
         if ($end < 0) {
-            throw new EmitterException("Range end value must be positive integer");
+            throw new EmitterException(
+                "Range end value must be positive integer"
+            );
         }
 
         $this->end = $end;
-
         return $this;
     }
 
     /**
-     * Get the total size of the document (or '*' if unknown).
+     * Get the total size of the document.
      *
      * @return  int|null
      */
@@ -138,16 +121,14 @@ class ContentRange
     }
 
     /**
-     * Set the total size of the document (or '*' if unknown).
+     * Set the total size of the document.
      *
-     * @param  int|null  $size  The total size of the document (or '*' if unknown).
-     *
+     * @param  int|null $size The total size of the document.
      * @return  self
      */
     public function setSize(?int $size): self
     {
         $this->size = $size;
-
         return $this;
     }
 }

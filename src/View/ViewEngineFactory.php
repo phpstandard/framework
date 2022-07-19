@@ -6,30 +6,37 @@ use Exception;
 use Framework\Contracts\View\ViewEngineFactoryInterface;
 use Framework\Contracts\View\ViewEngineInterface;
 use InvalidArgumentException;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
+/** @package Framework\View */
 class ViewEngineFactory implements ViewEngineFactoryInterface
 {
-    /** @var ContainerInterface $container */
-    private $container;
-
     /** @var array Associative array of the extentoin => ViewEngineInterface */
-    private $engines = [];
+    private array $engines = [];
 
-    public function __construct(ContainerInterface $container)
+    /**
+     * @param ContainerInterface $container
+     * @return void
+     */
+    public function __construct(private ContainerInterface $container)
     {
-        $this->container = $container;
     }
 
     /**
      * @inheritDoc
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function getEngine(string $path): ViewEngineInterface
     {
         foreach ($this->engines as $ext => $engine) {
             $ext = '.' . $ext;
 
-            if (substr($path,  -strlen($ext)) === $ext) {
+            if (substr($path, -strlen($ext)) === $ext) {
                 if (is_string($engine)) {
                     $engine = $this->container->get($engine);
                 }
@@ -55,7 +62,7 @@ class ViewEngineFactory implements ViewEngineFactoryInterface
      */
     public function addEngine(
         string $extention,
-        $engine
+        ViewEngineInterface|string $engine
     ): ViewEngineFactoryInterface {
         $this->engines[ltrim($extention, '.')] = $engine;
         return $this;

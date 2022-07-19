@@ -17,12 +17,12 @@ use function strtolower;
 trait SapiEmitterTrait
 {
     /**
-     * Assert either that no headers been sent or the output buffer contains no 
+     * Assert either that no headers been sent or the output buffer contains no
      * content.
      *
      * @return void
      */
-    private function assertNoPreviousOutput()
+    private function assertNoPreviousOutput(): void
     {
         $file = null;
         $line = null;
@@ -32,7 +32,7 @@ trait SapiEmitterTrait
         }
 
         if (ob_get_level() > 0 && ob_get_length() > 0) {
-            throw new PreviousOutputException;
+            throw new PreviousOutputException();
         }
     }
 
@@ -47,18 +47,18 @@ trait SapiEmitterTrait
      */
     private function emitStatusLine(ResponseInterface $response): void
     {
-        $reason_phrase = $response->getReasonPhrase();
-        $status_code = $response->getStatusCode();
-        $protocol_version = $response->getProtocolVersion();
+        $reasonPhrase = $response->getReasonPhrase();
+        $statusCode = $response->getStatusCode();
+        $protocolVersion = $response->getProtocolVersion();
 
         $header = sprintf(
             'HTTP/%s %d%s',
-            $protocol_version,
-            $status_code,
-            ($reason_phrase ? ' ' . $reason_phrase : '')
+            $protocolVersion,
+            $statusCode,
+            ($reasonPhrase ? ' ' . $reasonPhrase : '')
         );
 
-        header($header, true, $status_code);
+        header($header, true, $statusCode);
     }
 
     /**
@@ -74,17 +74,17 @@ trait SapiEmitterTrait
      */
     private function emitHeaders(ResponseInterface $response): void
     {
-        $status_code = $response->getStatusCode();
+        $statusCode = $response->getStatusCode();
 
         foreach ($response->getHeaders() as $name => $values) {
             $name  = $this->normalizeHeaderName($name);
 
-            // Replace previous headers of the same type which 
+            // Replace previous headers of the same type which
             // set out of this method. Never replace cookie headers.
             $replace = $name !== 'Set-Cookie';
             foreach ($values as $value) {
                 $header = sprintf('%s: %s', $name, $value);
-                header($header, $replace, $status_code);
+                header($header, $replace, $statusCode);
 
                 $replace = false;
             }
@@ -93,14 +93,14 @@ trait SapiEmitterTrait
 
     /**
      * Normalize the a header name
-     * 
+     *
      * Normalized header will be in the following format: Example-Header-Name
      *
-     * @param string $header_name
+     * @param string $headerName
      * @return string
      */
-    private function normalizeHeaderName(string $header_name): string
+    private function normalizeHeaderName(string $headerName): string
     {
-        return ucwords(strtolower($header_name), '-');
+        return ucwords(strtolower($headerName), '-');
     }
 }

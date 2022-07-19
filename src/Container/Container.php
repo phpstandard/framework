@@ -9,6 +9,7 @@ use Framework\Container\Exceptions\ContainerException;
 use Framework\Container\Exceptions\NotFoundException;
 use Framework\Contracts\Container\ContainerInterface;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -16,33 +17,26 @@ use Throwable;
 
 class Container implements ContainerInterface
 {
-    /**
-     * Registered definitions
-     *
-     * @var array
-     */
-    private $definitions = [];
+    /** Registered definitions */
+    private array $definitions = [];
+
+    /** Identifier for the registered shared (singleton) services */
+    private array $shared = [];
+
+    /** Resolved shared (singleton) services */
+    private array $resolved = [];
 
     /**
-     * Identifier for the registered shared (singleton) services
+     * Set container definition
      *
-     * @var array
-     */
-    private $shared = [];
-
-    /**
-     * Resolved shared (singleton) services
-     *
-     * @var array
-     */
-    private $resolved = [];
-
-    /**
-     * @inheritDoc
+     * @param string $abstract
+     * @param mixed $concrete
+     * @param bool $shared
+     * @return ContainerInterface
      */
     public function set(
         string $abstract,
-        $concrete = null,
+        mixed $concrete = null,
         bool $shared = false
     ): ContainerInterface {
         if (is_null($concrete)) {
@@ -59,18 +53,18 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @inheritDoc
+     * @param string|object $instance
+     * @param string $methodName
+     * @return mixed
+     * @throws ContainerException
+     * @throws NotFoundException
+     * @throws Throwable
+     * @throws ReflectionException
      */
-    public function callMehtod($instance, string $method_name)
-    {
-        if (!is_object($instance) && !is_string($instance)) {
-            throw new ContainerException(sprintf(
-                'Argument 1 passed to %s must be type of either string or object. %s passed.',
-                __METHOD__,
-                gettype($instance)
-            ));
-        }
-
+    public function callMehtod(
+        string|object $instance,
+        string $methodName
+    ): mixed {
         if (is_string($instance)) {
             $instance = $this->get($instance);
         }
@@ -78,11 +72,11 @@ class Container implements ContainerInterface
         $reflector = new ReflectionClass($instance);
 
         try {
-            $method = $reflector->getMethod($method_name);
+            $method = $reflector->getMethod($methodName);
         } catch (Throwable $th) {
             throw new ContainerException(sprintf(
                 "%s does not exists on",
-                get_class($instance) . '::' . $method_name . '()'
+                get_class($instance) . '::' . $methodName . '()'
             ), 0, $th);
         }
 
@@ -93,13 +87,13 @@ class Container implements ContainerInterface
     /**
      * @inheritDoc
      */
-    public function get($id)
+    public function get(string $id)
     {
         try {
             return $this->resolve($id);
         } catch (Throwable $th) {
             if (!$this->has($id)) {
-                throw new NotFoundException($id);
+                throw new NotFoundException($id, 0, $th);
             }
 
             throw $th;
@@ -109,7 +103,7 @@ class Container implements ContainerInterface
     /**
      * @inheritDoc
      */
-    public function has($id)
+    public function has(string $id): bool
     {
         if (isset($this->definitions[$id])) {
             return true;
@@ -117,12 +111,11 @@ class Container implements ContainerInterface
 
         try {
             $this->getReflector($id);
-            return true;
-        } catch (Throwable $th) {
+        } catch (Throwable) {
             return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -130,11 +123,15 @@ class Container implements ContainerInterface
      *
      * @param string $id
      * @return mixed
+     * @throws ContainerException
+     * @throws ReflectionException
+     * @throws NotFoundException
+     * @throws Throwable
      */
     private function resolve(string $id)
     {
-        $is_shared = isset($this->shared[$id]);
-        if ($is_shared && isset($this->resolved[$id])) {
+        $isShared = isset($this->shared[$id]);
+        if ($isShared && isset($this->resolved[$id])) {
             return $this->resolved[$id];
         }
 
@@ -146,6 +143,7 @@ class Container implements ContainerInterface
                 return $entry;
             }
 
+            /** @phpstan-ignore-next-line */
             if ($entry instanceof Closure) {
                 return $entry($this);
             }
@@ -167,7 +165,7 @@ class Container implements ContainerInterface
 
         $instance = $this->getInstance($reflector);
 
-        if ($is_shared) {
+        if ($isShared) {
             $this->resolved[$id] = $instance;
         }
 
@@ -189,9 +187,13 @@ class Container implements ContainerInterface
      * Get an instance for the entry
      *
      * @param ReflectionClass $item
-     * @return void
+     * @return object
+     * @throws ContainerException
+     * @throws ReflectionException
+     * @throws NotFoundException
+     * @throws Throwable
      */
-    private function getInstance(ReflectionClass $item)
+    private function getInstance(ReflectionClass $item): object
     {
         if (!$item->isInstantiable()) {
             throw new ContainerException("{$item->name} is not instantiable");
@@ -215,6 +217,10 @@ class Container implements ContainerInterface
      *
      * @param ReflectionMethod $method
      * @return array
+     * @throws NotFoundException
+     * @throws Throwable
+     * @throws ReflectionException
+     * @throws ContainerException
      */
     private function getResolvedParameters(ReflectionMethod $method): array
     {
@@ -230,7 +236,11 @@ class Container implements ContainerInterface
      * Resolve constructor parameter
      *
      * @param ReflectionParameter $parameter
-     * @return mixed a resolved parameter
+     * @return mixed
+     * @throws NotFoundException
+     * @throws Throwable
+     * @throws ReflectionException
+     * @throws ContainerException
      */
     private function resolveParameter(ReflectionParameter $parameter)
     {

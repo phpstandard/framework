@@ -5,24 +5,24 @@ namespace Framework\Http\Exceptions;
 use Framework\Http\StatusCodes;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
+use Stringable;
 use Throwable;
 
-class NotFoundException extends RuntimeException
+/** @package Framework\Http\Exceptions */
+class NotFoundException extends RuntimeException implements Stringable
 {
     /**
-     * Server request which is not dispatched
-     *
-     * @var ServerRequestInterface
+     * @param ServerRequestInterface $request
+     *  Server request which is not dispatched
+     * @param null|string $message
+     * @param null|Throwable $previous
+     * @return void
      */
-    private $request;
-
     public function __construct(
-        ServerRequestInterface $request,
+        private ServerRequestInterface $request,
         ?string $message = 'Route not found',
         ?Throwable $previous = null
     ) {
-        $this->request = $request;
-
         parent::__construct($message, StatusCodes::HTTP_NOT_FOUND, $previous);
     }
 
@@ -42,8 +42,9 @@ class NotFoundException extends RuntimeException
      * @param ServerRequestInterface|null $request
      * @return self
      */
-    public function setRequest(?ServerRequestInterface $request): self
-    {
+    public function setRequest(
+        ?ServerRequestInterface $request
+    ): NotFoundException {
         $this->request = $request;
         return $this;
     }
@@ -51,7 +52,7 @@ class NotFoundException extends RuntimeException
     /**
      * @inheritDoc
      */
-    public function __toString()
+    public function __toString(): string
     {
         $req = $this->getRequest();
         return $req->getMethod() . " " . $req->getUri() . " is not dispatched.";

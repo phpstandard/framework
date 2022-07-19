@@ -2,7 +2,7 @@
 
 /**
  * This factory class internally uses Laminas Diactoros library.
- * 
+ *
  * @see https://github.com/laminas/laminas-diactoros
  */
 
@@ -29,6 +29,7 @@ use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 
+/** @package Framework\Http */
 class HttpFactory implements
     RequestFactoryInterface,
     ResponseFactoryInterface,
@@ -37,23 +38,24 @@ class HttpFactory implements
     UploadedFileFactoryInterface,
     UriFactoryInterface
 {
-    /** @var RequestFactoryInterface $requestFactory */
-    private $requestFactory;
-
-    /** @var ResponseFactoryInterface $responseFactory */
-    private $responseFactory;
-
-    /** @var ServerRequestFactoryInterface $serverRequestFactory */
-    private $serverRequestFactory;
-
-    /** @var StreamFactoryInterface $streamFactory */
-    private $streamFactory;
-
-    /** @var UploadedFileFactoryInterface $uploadedFileFactory */
-    private $uploadedFileFactory;
-
-    /** @var UriFactoryInterface $uriFactory */
-    private $uriFactory;
+    /**
+     * @param null|RequestFactoryInterface $requestFactory
+     * @param null|ResponseFactoryInterface $responseFactory
+     * @param null|ServerRequestFactoryInterface $serverRequestFactory
+     * @param null|StreamFactoryInterface $streamFactory
+     * @param null|UploadedFileFactoryInterface $uploadedFileFactory
+     * @param null|UriFactoryInterface $uriFactory
+     * @return void
+     */
+    public function __construct(
+        private ?RequestFactoryInterface $requestFactory = null,
+        private ?ResponseFactoryInterface $responseFactory = null,
+        private ?ServerRequestFactoryInterface $serverRequestFactory = null,
+        private ?StreamFactoryInterface $streamFactory = null,
+        private ?UploadedFileFactoryInterface $uploadedFileFactory = null,
+        private ?UriFactoryInterface $uriFactory = null
+    ) {
+    }
 
     /**
      * @inheritDoc
@@ -61,7 +63,7 @@ class HttpFactory implements
     public function createRequest(string $method, $uri): RequestInterface
     {
         if (!$this->requestFactory) {
-            $this->requestFactory = new RequestFactory;
+            $this->requestFactory = new RequestFactory();
         }
 
         return $this->requestFactory->createRequest($method, $uri);
@@ -75,7 +77,7 @@ class HttpFactory implements
         string $reasonPhrase = ''
     ): ResponseInterface {
         if (!$this->responseFactory) {
-            $this->responseFactory = new ResponseFactory;
+            $this->responseFactory = new ResponseFactory();
         }
 
         return $this->responseFactory->createResponse($code, $reasonPhrase);
@@ -90,7 +92,7 @@ class HttpFactory implements
         array $serverParams = []
     ): ServerRequestInterface {
         if (!$this->serverRequestFactory) {
-            $this->serverRequestFactory = new ServerRequestFactory;
+            $this->serverRequestFactory = new ServerRequestFactory();
         }
 
         return $this->serverRequestFactory
@@ -103,7 +105,7 @@ class HttpFactory implements
     public function createStream(string $content = ''): StreamInterface
     {
         if (!$this->streamFactory) {
-            $this->streamFactory = new StreamFactory;
+            $this->streamFactory = new StreamFactory();
         }
 
         return $this->streamFactory->createStream($content);
@@ -112,10 +114,12 @@ class HttpFactory implements
     /**
      * @inheritDoc
      */
-    public function createStreamFromFile(string $filename, string $mode = 'r'): StreamInterface
-    {
+    public function createStreamFromFile(
+        string $filename,
+        string $mode = 'r'
+    ): StreamInterface {
         if (!$this->streamFactory) {
-            $this->streamFactory = new StreamFactory;
+            $this->streamFactory = new StreamFactory();
         }
 
         return $this->streamFactory->createStreamFromFile($filename, $mode);
@@ -127,7 +131,7 @@ class HttpFactory implements
     public function createStreamFromResource($resource): StreamInterface
     {
         if (!$this->streamFactory) {
-            $this->streamFactory = new StreamFactory;
+            $this->streamFactory = new StreamFactory();
         }
 
         return $this->streamFactory->createStreamFromResource($resource);
@@ -144,7 +148,7 @@ class HttpFactory implements
         ?string $clientMediaType = null
     ): UploadedFileInterface {
         if (!$this->uploadedFileFactory) {
-            $this->uploadedFileFactory = new UploadedFileFactory;
+            $this->uploadedFileFactory = new UploadedFileFactory();
         }
 
         return $this->uploadedFileFactory->createUploadedFile(
@@ -162,7 +166,7 @@ class HttpFactory implements
     public function createUri(string $uri = ''): UriInterface
     {
         if (!$this->uriFactory) {
-            $this->uriFactory = new UriFactory;
+            $this->uriFactory = new UriFactory();
         }
 
         return $this->uriFactory->createUri($uri);

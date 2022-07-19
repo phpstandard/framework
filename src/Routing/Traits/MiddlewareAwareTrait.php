@@ -11,17 +11,19 @@ trait MiddlewareAwareTrait
     /**
      * @var array
      */
-    protected $middlewares = [];
+    protected array $middlewares = [];
 
     /**
      * Add middleware(s) to the stack
      *
      * @param MiddlewareInterface[]|MiddlewareInterface|string[]|string $middlewares
      * @param bool $prepend
-     * @return self
+     * @return static
      */
-    public function middleware($middlewares, $prepend = false): self
-    {
+    public function middleware(
+        MiddlewareInterface|string|array $middlewares,
+        bool $prepend = false
+    ): static {
         if (!is_array($middlewares)) {
             $middlewares = [$middlewares];
         }
@@ -38,13 +40,14 @@ trait MiddlewareAwareTrait
     }
 
     /**
-     *  Append middleware
+     * Append middleware
      *
      * @param MiddlewareInterface|string $middleware
-     * @return self
+     * @return static
      */
-    public function appendMiddleware($middleware): self
-    {
+    public function appendMiddleware(
+        MiddlewareInterface|string $middleware
+    ): static {
         $this->middlewares[] = $middleware;
 
         return $this;
@@ -54,10 +57,11 @@ trait MiddlewareAwareTrait
      *  Prepend middleware
      *
      * @param MiddlewareInterface|string $middleware
-     * @return self
+     * @return static
      */
-    public function prependMiddleware($middleware): self
-    {
+    public function prependMiddleware(
+        MiddlewareInterface|string $middleware
+    ): static {
         array_unshift($this->middlewares, $middleware);
 
         return $this;
@@ -76,9 +80,9 @@ trait MiddlewareAwareTrait
     /**
      * Clear middleware stack
      *
-     * @return self
+     * @return static
      */
-    public function clearMiddlewareStack(): self
+    public function clearMiddlewareStack(): static
     {
         $this->middlewares = [];
         return $this;

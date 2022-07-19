@@ -6,22 +6,27 @@ namespace Framework\Support;
 
 use Framework\Contracts\Support\CallbackResolverInterface;
 use InvalidArgumentException;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
+/** @package Framework\Support */
 class CallbackResolver implements CallbackResolverInterface
 {
-    /** @var ContainerInterface $container */
-    private $container;
-
-    public function __construct(ContainerInterface $container)
-    {
+    /**
+     * @param ContainerInterface $container
+     * @return void
+     */
+    public function __construct(
+        private ContainerInterface $container
+    ) {
         $this->container = $container;
     }
 
     /**
      * @inheritDoc
      */
-    public function resolve($callback): callable
+    public function resolve(string|callable $callback): callable
     {
         if (is_string($callback) && strpos($callback, '::') !== false) {
             $callback = explode('::', $callback);
@@ -59,11 +64,12 @@ class CallbackResolver implements CallbackResolverInterface
     /**
      * Get an object instance from a class name
      *
-     * @param string                  $class
-     *
-     * @return object
+     * @param string $class
+     * @return mixed
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
      */
-    private function resolveClass(string $class)
+    private function resolveClass(string $class): mixed
     {
         return $this->container->get($class);
     }

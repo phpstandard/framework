@@ -6,12 +6,13 @@ namespace Framework\Contracts\Emitter;
 
 use Psr\Http\Message\ResponseInterface;
 
+/** @package Framework\Contracts\Emitter */
 interface EmitterInterface
 {
     /**
-     * 
+     *
      * Emit a response.
-     * 
+     *
      * Emits a response, including status line, headers, and the message body,
      * according to the environment.
      *

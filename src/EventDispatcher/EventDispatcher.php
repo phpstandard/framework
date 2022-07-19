@@ -8,14 +8,16 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
 
+/** @package Framework\EventDispatcher */
 class EventDispatcher implements EventDispatcherInterface
 {
-    /** @var ListenerProviderInterface $listenerProvider */
-    private $listenerProvider;
-
-    public function __construct(ListenerProviderInterface $listener_provider)
-    {
-        $this->listenerProvider = $listener_provider;
+    /**
+     * @param ListenerProviderInterface $listenerProvider
+     * @return void
+     */
+    public function __construct(
+        private ListenerProviderInterface $listenerProvider
+    ) {
     }
 
     /**
@@ -23,9 +25,9 @@ class EventDispatcher implements EventDispatcherInterface
      */
     public function dispatch(object $event)
     {
-        $is_stoppable = $event instanceof StoppableEventInterface;
+        $isStoppable = $event instanceof StoppableEventInterface;
 
-        if ($is_stoppable && $event->isPropagationStopped()) {
+        if ($isStoppable && $event->isPropagationStopped()) {
             return $event;
         }
 
@@ -33,7 +35,7 @@ class EventDispatcher implements EventDispatcherInterface
         foreach ($listeners as $listener) {
             $listener($event);
 
-            if ($is_stoppable && $event->isPropagationStopped()) {
+            if ($isStoppable && $event->isPropagationStopped()) {
                 break;
             }
         }
