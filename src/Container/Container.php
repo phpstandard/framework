@@ -23,7 +23,7 @@ class Container implements ContainerInterface
     /** Identifier for the registered shared (singleton) services */
     private array $shared = [];
 
-    /** Resolved shared (singleton) services */
+    /** Resolved shared services */
     private array $resolved = [];
 
     /**
@@ -128,12 +128,14 @@ class Container implements ContainerInterface
      * @throws NotFoundException
      * @throws Throwable
      */
-    private function resolve(string $id)
+    private function resolve(string $id): mixed
     {
-        $isShared = isset($this->shared[$id]);
-        if ($isShared && isset($this->resolved[$id])) {
+        if (isset($this->resolved[$id])) {
             return $this->resolved[$id];
         }
+
+        $isShared = isset($this->shared[$id]);
+        $isDefined = isset($this->definitions[$id]);
 
         $entry = $id;
         if (isset($this->definitions[$id])) {
@@ -165,7 +167,8 @@ class Container implements ContainerInterface
 
         $instance = $this->getInstance($reflector);
 
-        if ($isShared) {
+        if ($isShared || !$isDefined) {
+            // Save shared or autowired instances to resolved cache
             $this->resolved[$id] = $instance;
         }
 
