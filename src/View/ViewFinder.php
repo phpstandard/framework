@@ -81,6 +81,14 @@ class ViewFinder implements ViewFinderInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getPaths(): array
+    {
+        return $this->paths;
+    }
+
+    /**
      * Check if the view name includes namespace
      *
      * @param string $name

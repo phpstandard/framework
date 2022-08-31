@@ -51,4 +51,7 @@ interface ViewFinderInterface
      * @return ViewFinderInterface
      */
     public function addPath(string $path): ViewFinderInterface;
+
+    /** @return string[] */
+    public function getPaths(): array;
 }
