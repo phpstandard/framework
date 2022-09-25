@@ -206,7 +206,7 @@ class Container implements ContainerInterface
 
         if (
             is_null($constructor)
-            || $constructor->getNumberOfRequiredParameters() == 0
+            || $constructor->getNumberOfParameters() == 0
         ) {
             return $item->newInstance();
         }
